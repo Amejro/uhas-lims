@@ -1,0 +1,41 @@
+created:
+    - database/factories/TestFactory.php
+    - database/factories/InventoryFactory.php
+    - database/factories/SampleFactory.php
+    - database/factories/PaymentFactory.php
+    - database/factories/DosageFormFactory.php
+    - database/factories/TemplateFactory.php
+    - database/factories/StorageLocationFactory.php
+    - database/factories/ProducerFactory.php
+    - database/factories/ReportFactory.php
+    - database/migrations/2024_12_03_113543_create_tests_table.php
+    - database/migrations/2024_12_03_113544_create_inventories_table.php
+    - database/migrations/2024_12_03_113545_create_samples_table.php
+    - database/migrations/2024_12_03_113546_create_payments_table.php
+    - database/migrations/2024_12_03_113547_create_dosage_forms_table.php
+    - database/migrations/2024_12_03_113548_create_templates_table.php
+    - database/migrations/2024_12_03_113549_create_storage_locations_table.php
+    - database/migrations/2024_12_03_113550_create_producers_table.php
+    - database/migrations/2024_12_03_113551_create_reports_table.php
+    - database/migrations/2024_12_03_113552_create_sample_test_table.php
+    - database/migrations/2024_12_03_113553_create_inventory_test_table.php
+    - app/Models/Test.php
+    - app/Models/Inventory.php
+    - app/Models/Sample.php
+    - app/Models/Payment.php
+    - app/Models/DosageForm.php
+    - app/Models/Template.php
+    - app/Models/StorageLocation.php
+    - app/Models/Producer.php
+    - app/Models/Report.php
+models:
+    User: { name: string, email: string, email_verified_at: 'datetime nullable', password: string, remember_token: 'string nullable' }
+    Test: { name: string, description: 'text nullable', price: integer, user_id: 'id foreign:users', timestamps: timestamps, relationships: { hasMany: Template, belongsToMany: 'Sample, Inventory' } }
+    Inventory: { name: string, description: 'text nullable', unit: 'string nullable', total_quantity: 'integer nullable', reorder_level: 'integer nullable', expiry_date: timestamp, status: 'enum:available, out_of_stock', has_variant: boolean, inventory_variant: 'json nullable', storage_location_id: 'id foreign:storage_locations', user_id: 'id foreign:users', timestamps: timestamps, relationships: { belongsTo: StorageLocation, belongsToMany: Test } }
+    Sample: { name: string, quantity: integer, collection_date: timestamp, active_ingredient: 'array nullable', delivered_by: string, deliverer_contact: string, indication: 'array nullable', status: 'enum:collected,in_progress,completed', dosage: 'array nullable', date_of_manufacture: timestamp, expiry_date: timestamp, batch_number: string, serial_code: 'string nullable', storage_location_id: 'id foreign:storage_locations', dosage_form_id: 'id foreign:dosage_forms', user_id: 'id foreign:users', producer_id: 'id foreign:producers', total_cost: 'integer nullable', timestamps: timestamps, relationships: { belongsTo: 'StorageLocation,DosageForm,Producer', belongsToMany: Test, hasMany: 'Payment,Report' } }
+    Payment: { amount: integer, status: 'enum:unpaid, paid', sample_id: 'id foreign:Sample', user_id: 'id foreign:users', timestamps: timestamps, relationships: { belongsTo: Sample } }
+    DosageForm: { name: string, code: string, timestamps: timestamps, relationships: { hasMany: Sample } }
+    Template: { name: string, content: json, test_id: 'id foreign:tests', dosage_form_id: 'id foreign:dosage_forms', user_id: 'id foreign:users', timestamps: timestamps, relationships: { hasMany: DosageForm, belongsTo: Test } }
+    StorageLocation: { room: string, freezer: 'string nullable', shelf: 'string nullable', timestamps: timestamps, relationships: { hasMany: 'Sample,Inventory' } }
+    Producer: { name: string, address: string, gps_address: 'string nullable', phone: string, email: 'string nullable', user_id: 'id foreign:users', timestamps: timestamps, relationships: { hasMany: Sample } }
+    Report: { sample_id: 'id foreign:samples', report_date: timestamp, user_id: 'id foreign:users', timestamps: timestamps, relationships: { belongsTo: Sample } }
