@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Producer extends Model
 {
@@ -43,5 +44,33 @@ class Producer extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function getForm()
+    {
+        return [
+            TextInput::make('name')
+                ->required(),
+            TextInput::make('address')
+                ->required(),
+            TextInput::make('gps_address'),
+            TextInput::make('phone')
+                ->tel()
+                ->required(),
+            TextInput::make('email')
+                ->email(),
+        ];
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->user_id = auth()->id();
+
+
+        });
+
+
+
     }
 }

@@ -2,13 +2,28 @@
 
 namespace App\Filament\Resources;
 
+use App\Models\DosageForm;
+use App\Models\Test;
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use App\Models\Sample;
+use App\Models\Producer;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\TextInput;
+use Filament\Support\Contracts\HasLabel;
+use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\SampleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SampleResource\RelationManagers;
@@ -18,64 +33,153 @@ class SampleResource extends Resource
 {
     protected static ?string $model = Sample::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationIcon = 'heroicon-o-funnel';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required(),
-                Forms\Components\TextInput::make('quantity')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\DateTimePicker::make('collection_date')
-                    ->required(),
-                // Forms\Components\TextInput::make('active_ingredient'),
-                Forms\Components\TagsInput::make('active_ingredient')
-                    ->placeholder('Enter ingredient')
-                ,
 
-                Forms\Components\TextInput::make('delivered_by')
-                    ->required(),
-                Forms\Components\TextInput::make('deliverer_contact')
-                    ->required(),
-                // Forms\Components\TextInput::make('indication'),
+                //             Section::make('Rate limiting')
+                // ->description('Prevent abuse by limiting the number of requests per period')
+                // ->schema([
+                //     // ...
+                // ])
 
-                Forms\Components\TagsInput::make('indication')->columnSpanFull()->reorderable()
-                    ->placeholder('Enter indications'),
+                Section::make()
 
-                Forms\Components\TextInput::make('status')
-                    ->required(),
-                Forms\Components\TextInput::make('dosage'),
-                Forms\Components\DateTimePicker::make('date_of_manufacture')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('expiry_date')
-                    ->required(),
-                Forms\Components\TextInput::make('batch_number')
-                    ->required(),
-                Forms\Components\TextInput::make('serial_code'),
-                Forms\Components\Select::make('storage_location_id')
-                    ->relationship('storageLocation', 'id')
-                    ->required(),
-                Forms\Components\Select::make('dosage_form_id')
-                    ->relationship('dosageForm', 'name')
-                    ->required(),
-                // Forms\Components\Select::make('user_id')
-                //     ->relationship('user', 'name')
-                //     ->required(),
-                Forms\Components\Select::make('producer_id')
-                    ->relationship('producer', 'name')
-                    ->required(),
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Sample name')
+                            ->required(),
+                        Select::make('dosage_form_id')
+                            ->relationship('dosageForm', 'name')
+                            ->live()
+                            // ->afterStateUpdated(function (Set $set, Get $get) {
 
-                Forms\Components\Select::make('tests')
-                    ->multiple()
-                    ->relationship('tests', 'name')
-                    ->preload()
-                    ->required(),
+                            //     $DosageCode = DosageForm::find($get('dosage_form_id'))->code;
+                            //     ;
 
-                Forms\Components\TextInput::make('total_cost')
-                    ->numeric(),
+                            //     $totalSample = Sample::all()->count();
+
+                            //     $serial = "FITAM/{$DosageCode}{$totalSample}/24";
+
+                            //     $set('serial_code', $serial);
+                            //     // $sum = Test::select('price')
+                            //     //     ->whereIn('id', $get('tests'))
+                            //     //     ->get();
+                            //     // //dd($sum->sum('price'));
+                            //     // $set('total_cost', $sum->sum('price'));
+
+
+
+                            // })
+                            ->required(),
+                        Select::make('tests')
+                            ->multiple()
+                            ->relationship('tests', 'name')
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set, Get $get) {
+
+                                $sum = Test::select('price')
+                                    ->whereIn('id', $get('tests'))
+                                    ->get();
+                                //dd($sum->sum('price'));
+                                $set('total_cost', $sum->sum('price'));
+
+
+
+                            })
+                            ->required(),
+                        TextInput::make('quantity')
+                            ->required()
+                            ->numeric(),
+                        TextInput::make('batch_number')
+                            ->required(),
+                        TextInput::make('serial_code'),
+                        TextInput::make('total_cost')
+                            ->live()
+                            ->readOnly()
+                            ->numeric(),
+                    ])->columns(2),
+
+                Section::make()
+
+                    ->schema([
+                        TagsInput::make('indication')->reorderable()
+                            ->placeholder('Enter indications'),
+
+                        TagsInput::make('active_ingredient')
+                            ->placeholder('Enter ingredient')
+                        ,
+
+                        TextInput::make('dosage'),
+
+                        DateTimePicker::make('date_of_manufacture')
+                            ->required(),
+                        DateTimePicker::make('expiry_date')
+                            ->required(),
+
+                    ])->columns(2),
+
+                Section::make()
+
+                    ->schema([
+                        TextInput::make('delivered_by')
+                            ->required(),
+                        TextInput::make('deliverer_contact')
+                            ->required(),
+
+                        DateTimePicker::make('collection_date')
+                            ->required(),
+                        Select::make('storage_location_id')
+                            ->relationship('storageLocation', 'room')
+                            ->required(),
+
+
+                        Select::make('producer_id')
+                            ->relationship('producer', 'name')
+                            ->createOptionForm(Producer::getForm())
+                            ->required(),
+
+
+
+
+
+                        Radio::make('status')
+                            ->hidden(function ($record) {
+                                if (!$record) {
+                                    return true;
+                                }
+
+                            })
+                            ->options(Status::class)
+                            ->columns(3)
+                            ->required(),
+
+                    ])->columns(2),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             ]);
     }
 
@@ -83,50 +187,54 @@ class SampleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('quantity')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('collection_date')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('active_ingredient')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('delivered_by')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('deliverer_contact')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('indication')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('dosage')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('date_of_manufacture')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('expiry_date')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('batch_number')
-                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('serial_code')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('storageLocation.id')
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('producer.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('dosageForm.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('quantity')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('producer.name')
+                Tables\Columns\TextColumn::make('collection_date')
+                    ->dateTime()
+                    ->sortable()->toggleable(isToggledHiddenByDefault: true),
+
+                BadgeColumn::make('status')
+                    ->colors([
+                        'secondary' => static fn($state): bool => $state === 'collected',
+                        'warning' => static fn($state): bool => $state === 'in_progress',
+                        'success' => static fn($state): bool => $state === 'completed',
+                    ])
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('delivered_by')
+                    ->searchable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('deliverer_contact')
+                    ->searchable()->toggleable(isToggledHiddenByDefault: true),
+
+
+
+                Tables\Columns\TextColumn::make('date_of_manufacture')
+                    ->dateTime()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('expiry_date')
+                    ->dateTime()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+
+                Tables\Columns\TextColumn::make('storageLocation.id')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()->toggleable(isToggledHiddenByDefault: true),
+
+
+
                 Tables\Columns\TextColumn::make('total_cost')
-                    ->numeric()
+                    ->money('GHS')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -142,8 +250,16 @@ class SampleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
+                // Tables\Actions\EditAction::make(),
+                Action::make('pdf')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->url(fn(Sample $record) => route('samples.pdf.download', $record))
+                    ->openUrlInNewTab()
+            ])->recordUrl(function (Model $record) {
+
+                return Pages\EditSample::getUrl([$record->id]);
+
+            })
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -167,4 +283,21 @@ class SampleResource extends Resource
             'edit' => Pages\EditSample::route('/{record}/edit'),
         ];
     }
+}
+
+
+
+enum Status: string implements HasLabel
+{
+    case Collected = 'collected';
+    case In_progress = 'in_progress';
+    case Completed = 'completed';
+
+
+    public function getLabel(): ?string
+    {
+        return $this->name;
+
+    }
+
 }

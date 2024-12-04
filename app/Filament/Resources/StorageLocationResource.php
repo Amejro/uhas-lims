@@ -17,7 +17,9 @@ class StorageLocationResource extends Resource
 {
     protected static ?string $model = StorageLocation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Lab Management';
+
+    protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
     public static function form(Form $form): Form
     {

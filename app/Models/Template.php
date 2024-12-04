@@ -56,4 +56,16 @@ class Template extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->user_id = auth()->id();
+
+
+        });
+
+
+
+    }
 }

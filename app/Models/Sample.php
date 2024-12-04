@@ -103,14 +103,10 @@ class Sample extends Model
     {
         static::creating(function ($model) {
             $model->user_id = auth()->id();
+            $model->status = 'collected';
+
         });
 
-        // static::created(function ($model) {
-
-
-        //     $currentSample = Sample::find($model->id)->first();
-        //     dd($currentSample);
-        // });
 
 
     }

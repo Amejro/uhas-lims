@@ -17,13 +17,15 @@ class ProducerResource extends Resource
 {
     protected static ?string $model = Producer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Producer name')
                     ->required(),
                 Forms\Components\TextInput::make('address')
                     ->required(),
@@ -33,9 +35,9 @@ class ProducerResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email(),
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
+                // Forms\Components\Select::make('user_id')
+                //     ->relationship('user', 'name')
+                //     ->required(),
             ]);
     }
 
@@ -53,9 +55,6 @@ class ProducerResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -17,6 +17,8 @@ class DosageFormResource extends Resource
 {
     protected static ?string $model = DosageForm::class;
 
+    protected static ?string $navigationGroup = 'Lab Management';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

@@ -17,7 +17,9 @@ class TestResource extends Resource
 {
     protected static ?string $model = Test::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Lab Management';
+
+    protected static ?string $navigationIcon = 'heroicon-o-beaker';
 
     public static function form(Form $form): Form
     {
@@ -30,10 +32,8 @@ class TestResource extends Resource
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
+                    ->prefix('GH₵'),
+
             ]);
     }
 
@@ -44,9 +44,10 @@ class TestResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
+                    ->money('GHS')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Created by')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

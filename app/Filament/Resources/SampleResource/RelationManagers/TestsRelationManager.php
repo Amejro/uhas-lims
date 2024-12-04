@@ -9,7 +9,10 @@ use App\Models\Template;
 use Filament\Forms\Form;
 use App\Models\SampleTest;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Section;
 use FilamentTiptapEditor\TiptapEditor;
+use Filament\Support\Contracts\HasLabel;
+use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Database\Eloquent\Builder;
 use FilamentTiptapEditor\Enums\TiptapOutput;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,9 +26,17 @@ class TestsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255)->readOnly(),
+                Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)->readOnly(),
+
+                        Forms\Components\Radio::make('status')
+                            ->options(Status::class),
+                    ])->columns(2),
+
+
 
                 TiptapEditor::make('test_result')
                     // ->label('Design')
@@ -47,7 +58,13 @@ class TestsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('status'),
+                // Tables\Columns\TextColumn::make('status'),
+
+                BadgeColumn::make('status')
+                    ->colors([
+                        'warning' => static fn($state): bool => $state === 'pending',
+                        'success' => static fn($state): bool => $state === 'completed',
+                    ]),
             ])
             ->filters([
                 //
@@ -61,6 +78,7 @@ class TestsRelationManager extends RelationManager
                     ->closeModalByClickingAway(false)
                     ->closeModalByEscaping(false)
                     ->modalAutofocus(false)
+                    ->label('test')->icon('heroicon-o-eye-dropper')
                     ->beforeFormFilled(function ($record) {
                         if (!$record->test_result) {
 
@@ -86,5 +104,19 @@ class TestsRelationManager extends RelationManager
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+}
+
+
+enum Status: string implements HasLabel
+{
+    case Pending = 'pending';
+    case Completed = 'completed';
+
+
+    public function getLabel(): ?string
+    {
+        return $this->name;
+
     }
 }

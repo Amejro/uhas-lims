@@ -19,7 +19,9 @@ class TemplateResource extends Resource
 {
     protected static ?string $model = Template::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Lab Management';
+
+    protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
 
     public static function form(Form $form): Form
     {
@@ -35,9 +37,7 @@ class TemplateResource extends Resource
                 Forms\Components\Select::make('dosage_form_id')
                     ->relationship('dosageForm', 'name')
                     ->required(),
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
+
 
                 TiptapEditor::make('content')
                     ->label('Design')
@@ -71,9 +71,10 @@ class TemplateResource extends Resource
                 Tables\Columns\TextColumn::make('dosageForm.name')
                     ->numeric()
                     ->sortable(),
-                // Tables\Columns\TextColumn::make('user.name')
-                //     ->numeric()
-                //     ->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Created by')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
