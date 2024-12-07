@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,9 +14,23 @@ return new class extends Migration
 
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount');
-            $table->enum('status', ["unpaid",""]);
+            $table->decimal('total_amount', 10, 2);
+            $table->decimal('amount_paid', 10, 2);
+            $table->string('serial_code')->unique();
+            $table->decimal('balance_due', 10, 2);
+            $table->enum('status', ["pending", "part payment", "paid"])->default("pending");
             $table->foreignId('sample_id')->constrained('Samples');
+            $table->foreignId('user_id')->constrained();
+            $table->timestamps();
+        });
+
+        Schema::create('payment_records', function (Blueprint $table) {
+            $table->id();
+            $table->decimal('amount', 10, 2);
+            $table->string('payment_method');
+            $table->string('transaction_id')->nullable();
+            $table->string('note')->nullable();
+            $table->foreignId('payment_id')->constrained('Payments');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
@@ -30,6 +43,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('payment_records');
         Schema::dropIfExists('payments');
+
     }
 };

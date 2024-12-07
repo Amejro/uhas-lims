@@ -58,9 +58,13 @@ class Test extends Model
     {
         static::creating(function ($model) {
             $model->user_id = auth()->id();
-
+            $model->price *= 100;
 
         });
+
+        // static::updating(function ($model) {
+        //     $model->price *= 100;
+        // });
 
 
 

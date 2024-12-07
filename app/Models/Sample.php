@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\SampleTest;
+use App\Events\SampleCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -104,10 +105,33 @@ class Sample extends Model
         static::creating(function ($model) {
             $model->user_id = auth()->id();
             $model->status = 'collected';
+            // $model->total_cost *= 100;
 
         });
 
 
+
+        static::created(function ($model) {
+            // event(new SampleCreated($model));
+
+            // SampleCreated::dispatch($model);
+
+            // ceate a payment for this sample
+
+            $payment = new Payment();
+
+            $payment->create([
+                'user_id' => auth()->id(),
+                'sample_id' => $model->id,
+                'total_amount' => $model->total_cost,
+                'amount_paid' => 0,
+                'balance_due' => $model->total_cost,
+                'status' => 'pending',
+                'serial_code' => $model->serial_code,
+            ]);
+
+
+        });
 
     }
 }

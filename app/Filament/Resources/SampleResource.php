@@ -2,20 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\DosageForm;
-use App\Models\Test;
 use Filament\Forms;
+use App\Models\Test;
 use Filament\Tables;
+use App\Models\Sample;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use App\Models\Sample;
 use App\Models\Producer;
 use Filament\Forms\Form;
+use App\Models\DosageForm;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Route;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TagsInput;
@@ -41,11 +42,6 @@ class SampleResource extends Resource
         return $form
             ->schema([
 
-                //             Section::make('Rate limiting')
-                // ->description('Prevent abuse by limiting the number of requests per period')
-                // ->schema([
-                //     // ...
-                // ])
 
                 Section::make()
 
@@ -83,14 +79,14 @@ class SampleResource extends Resource
                             ->live()
                             ->afterStateUpdated(function (Set $set, Get $get) {
 
+
+
                                 $sum = Test::select('price')
                                     ->whereIn('id', $get('tests'))
                                     ->get();
-                                //dd($sum->sum('price'));
-                                $set('total_cost', $sum->sum('price'));
 
 
-
+                                $set('total_cost', $sum->sum('price') / 100);
                             })
                             ->required(),
                         TextInput::make('quantity')
@@ -138,16 +134,10 @@ class SampleResource extends Resource
                             ->relationship('storageLocation', 'room')
                             ->required(),
 
-
                         Select::make('producer_id')
                             ->relationship('producer', 'name')
                             ->createOptionForm(Producer::getForm())
                             ->required(),
-
-
-
-
-
                         Radio::make('status')
                             ->hidden(function ($record) {
                                 if (!$record) {
@@ -160,25 +150,6 @@ class SampleResource extends Resource
                             ->required(),
 
                     ])->columns(2),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             ]);
     }
@@ -235,7 +206,7 @@ class SampleResource extends Resource
 
                 Tables\Columns\TextColumn::make('total_cost')
                     ->money('GHS')
-                    ->sortable(),
+                ,
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -250,7 +221,9 @@ class SampleResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                // Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make()
+
+
                 Action::make('pdf')
                     ->icon('heroicon-o-document-arrow-down')
                     ->url(fn(Sample $record) => route('samples.pdf.download', $record))

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -22,12 +21,12 @@ return new class extends Migration
             $table->string('delivered_by');
             $table->string('deliverer_contact');
             $table->string('indication')->nullable();
-            $table->enum('status', ["collected","in_progress","completed"]);
+            $table->enum('status', ["collected", "in_progress", "completed"]);
             $table->string('dosage')->nullable();
             $table->timestamp('date_of_manufacture');
             $table->timestamp('expiry_date');
-            $table->string('batch_number');
-            $table->string('serial_code')->nullable();
+            $table->string('batch_number')->nullable();
+            $table->string('serial_code')->unique();
             $table->foreignId('storage_location_id')->constrained();
             $table->foreignId('dosage_form_id')->constrained();
             $table->foreignId('user_id')->constrained();
