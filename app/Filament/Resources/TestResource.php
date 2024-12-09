@@ -67,6 +67,7 @@ class TestResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ReplicateAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

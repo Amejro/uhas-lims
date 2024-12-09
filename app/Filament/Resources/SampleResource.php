@@ -18,10 +18,12 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Route;
 use Filament\Forms\Components\Section;
+use Filament\Tables\Actions\ViewAction;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Support\Contracts\HasLabel;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DateTimePicker;
@@ -43,6 +45,7 @@ class SampleResource extends Resource
             ->schema([
 
 
+
                 Section::make()
 
                     ->schema([
@@ -51,26 +54,6 @@ class SampleResource extends Resource
                             ->required(),
                         Select::make('dosage_form_id')
                             ->relationship('dosageForm', 'name')
-                            ->live()
-                            // ->afterStateUpdated(function (Set $set, Get $get) {
-
-                            //     $DosageCode = DosageForm::find($get('dosage_form_id'))->code;
-                            //     ;
-
-                            //     $totalSample = Sample::all()->count();
-
-                            //     $serial = "FITAM/{$DosageCode}{$totalSample}/24";
-
-                            //     $set('serial_code', $serial);
-                            //     // $sum = Test::select('price')
-                            //     //     ->whereIn('id', $get('tests'))
-                            //     //     ->get();
-                            //     // //dd($sum->sum('price'));
-                            //     // $set('total_cost', $sum->sum('price'));
-
-
-
-                            // })
                             ->required(),
                         Select::make('tests')
                             ->multiple()
@@ -78,15 +61,11 @@ class SampleResource extends Resource
                             ->preload()
                             ->live()
                             ->afterStateUpdated(function (Set $set, Get $get) {
-
-
-
                                 $sum = Test::select('price')
                                     ->whereIn('id', $get('tests'))
                                     ->get();
 
-
-                                $set('total_cost', $sum->sum('price') / 100);
+                                $set('total_cost', $sum->sum('price'));
                             })
                             ->required(),
                         TextInput::make('quantity')
@@ -94,7 +73,7 @@ class SampleResource extends Resource
                             ->numeric(),
                         TextInput::make('batch_number')
                             ->required(),
-                        TextInput::make('serial_code'),
+                        TextInput::make('serial_code')->readOnly(),
                         TextInput::make('total_cost')
                             ->live()
                             ->readOnly()
@@ -117,7 +96,6 @@ class SampleResource extends Resource
                             ->required(),
                         DateTimePicker::make('expiry_date')
                             ->required(),
-
                     ])->columns(2),
 
                 Section::make()
@@ -219,15 +197,26 @@ class SampleResource extends Resource
             ->filters([
                 //
             ])
+
+
+
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                // Tables\Actions\EditAction::make()
+                ActionGroup::make([
+                    ViewAction::make(),
+                    // Tables\Actions\EditAction::make()
 
+                    Action::make('Print report')
+                        ->icon('heroicon-o-document-arrow-down')
+                        ->url(fn(Sample $record) => route('samples.pdf.download', $record))
+                        ->openUrlInNewTab(),
 
-                Action::make('pdf')
-                    ->icon('heroicon-o-document-arrow-down')
-                    ->url(fn(Sample $record) => route('samples.pdf.download', $record))
-                    ->openUrlInNewTab()
+                    Action::make('Recommendations')
+                        ->icon('heroicon-o-hand-thumb-up')
+                    // ->url(fn(Sample $record) => route('samples.pdf.download', $record))
+                    // ->openUrlInNewTab()
+
+                ])
+
             ])->recordUrl(function (Model $record) {
 
                 return Pages\EditSample::getUrl([$record->id]);

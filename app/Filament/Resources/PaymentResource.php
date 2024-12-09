@@ -4,10 +4,11 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Sample;
 use App\Models\Payment;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 
+use Filament\Tables\Table;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
@@ -30,6 +31,9 @@ class PaymentResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     protected static ?string $titleAttribute = 'title';
+    protected static ?string $placeHoder = 'payment';
+
+
 
 
 
@@ -63,32 +67,25 @@ class PaymentResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('serial_code')
-                    ->searchable(),
+                TextColumn::make('serial_code'),
                 TextColumn::make('total_amount')
                     ->label('Amount due')
-                    ->money('GHS')
-
-                ,
-                TextColumn::make('amount_paid')
-
-                ,
+                    ->money('GHS'),
+                TextColumn::make('amount_paid'),
 
                 TextColumn::make('balance_due')
-                    ->money('GHS')
-
-                ,
+                    ->money('GHS'),
 
                 BadgeColumn::make('status')
                     ->colors([
                         'secondary' => static fn($state): bool => $state === 'pending',
                         'warning' => static fn($state): bool => $state === 'part payment',
                         'success' => static fn($state): bool => $state === 'paid',
-                    ])->searchable(),
+                    ]),
 
                 TextColumn::make('sample.name')
                     ->label('Product Name')
-                    ->sortable(),
+                ,
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -151,6 +148,18 @@ class PaymentResource extends Resource
     }
 
 
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return PaymentResource::getUrl('view', ['record' => $record]);
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Product name' => Sample::find($record->sample_id)->name,
+            'Amount Due' => 'GH₵' . number_format($record->total_amount, 2, '.', ',')
+        ];
+    }
 
 
 }

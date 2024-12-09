@@ -103,20 +103,31 @@ class Sample extends Model
     protected static function booted()
     {
         static::creating(function ($model) {
+
+
+            $DosageCode = DosageForm::find($model->dosage_form_id)->code;
+
+            $sampleCount = Sample::all()->count();
+
+            $totalSample = sprintf("%03d", $sampleCount == 0 ? 1 : $sampleCount);
+
+            $year = substr(date('Y'), -2);
+            $month = sprintf("%02d", date('m'));
+
+            $serial = "ITAM/{$DosageCode}/{$totalSample}/{$month}/{$year}";
+
             $model->user_id = auth()->id();
             $model->status = 'collected';
-            // $model->total_cost *= 100;
+            $model->serial_code = $serial;
 
         });
 
 
 
         static::created(function ($model) {
-            // event(new SampleCreated($model));
 
-            // SampleCreated::dispatch($model);
 
-            // ceate a payment for this sample
+
 
             $payment = new Payment();
 

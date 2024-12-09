@@ -36,6 +36,8 @@ class TemplateResource extends Resource
                     ->required(),
                 Forms\Components\Select::make('dosage_form_id')
                     ->relationship('dosageForm', 'name')
+                    // ->multiple()
+                    ->preload()
                     ->required(),
 
 

@@ -23,8 +23,8 @@ return new class extends Migration {
             $table->string('indication')->nullable();
             $table->enum('status', ["collected", "in_progress", "completed"]);
             $table->string('dosage')->nullable();
-            $table->timestamp('date_of_manufacture');
-            $table->timestamp('expiry_date');
+            $table->timestamp('date_of_manufacture')->nullable();
+            $table->timestamp('expiry_date')->nullable();
             $table->string('batch_number')->nullable();
             $table->string('serial_code')->unique();
             $table->foreignId('storage_location_id')->constrained();

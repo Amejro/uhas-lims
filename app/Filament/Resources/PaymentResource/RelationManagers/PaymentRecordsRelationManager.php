@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\PaymentRecord;
 
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -39,15 +40,15 @@ class PaymentRecordsRelationManager extends RelationManager
                     ->required()
                     ->numeric()
                     ->prefix('GH₵')
-
-                    // ->helperText('60% part payment acceptable')
-                    ->hint(function (RelationManager $livewire) {
-                        return $livewire->getOwnerRecord()->amount_paid == 0 ? "At least GH₵ {$livewire->getOwnerRecord()->balance_due} (60%) required." : "Full payment of  GH₵ {$livewire->getOwnerRecord()->balance_due} required. ";
-                    })
+                    // ->hint(function (RelationManager $livewire) {
+                    //     return $livewire->getOwnerRecord()->amount_paid == 0 ? "At least GH₵ {$livewire->getOwnerRecord()->balance_due} (60%) required." : "Full payment of  GH₵ {$livewire->getOwnerRecord()->balance_due} required. ";
+                    // })
                     ->rules(
                         static function (RelationManager $livewire): Closure {
                             return static function (string $attribute, $value, Closure $fail) use ($livewire) {
-
+                                if ($livewire->getOwnerRecord()->amount_paid == 0 && $value > $livewire->getOwnerRecord()->balance_due) {
+                                    $fail("Amount cannot be more than ( GH₵ {$livewire->getOwnerRecord()->balance_due}).");
+                                }
 
                                 if ($livewire->getOwnerRecord()->amount_paid > 0 && $value > $livewire->getOwnerRecord()->balance_due) {
                                     $fail("Amount cannot be more than (GH₵ {$livewire->getOwnerRecord()->balance_due}).");
@@ -58,7 +59,7 @@ class PaymentRecordsRelationManager extends RelationManager
                                 }
 
                                 if ($livewire->getOwnerRecord()->amount_paid == 0 && $value < $livewire->getOwnerRecord()->balance_due * 0.6) {
-                                    $fail('At least 60% payment is required');
+                                    $fail("At least 60% required.");
                                 }
 
                             };
@@ -101,8 +102,11 @@ class PaymentRecordsRelationManager extends RelationManager
                 CreateAction::make()->slideOver()
                     ->hidden(function (RelationManager $livewire) {
                         return $livewire->getOwnerRecord()->balance_due == 0;
-                    })
-                ,
+                    }),
+                Action::make('Receipt')
+                    ->icon('heroicon-o-ticket')
+                    ->requiresConfirmation()
+                // ->action(fn (Post $record) => $record->delete())
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
