@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\PaymentResource\Pages;
 
-use App\Filament\Resources\PaymentResource;
 use Filament\Actions;
+use App\Models\Payment;
+use Filament\Pages\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
+use App\Filament\Resources\PaymentResource;
 
 class ViewPayment extends ViewRecord
 {
@@ -14,6 +16,14 @@ class ViewPayment extends ViewRecord
     {
         return [
             // Actions\EditAction::make(),
+            Action::make('Receipt')
+                ->icon('heroicon-o-ticket')
+                ->url(fn(Payment $payment) => route('receipt.pdf.download', $payment))
+
+                ->openUrlInNewTab()
+
+
+                ->requiresConfirmation()
         ];
     }
 }

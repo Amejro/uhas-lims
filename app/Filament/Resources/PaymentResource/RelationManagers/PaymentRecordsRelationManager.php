@@ -103,10 +103,13 @@ class PaymentRecordsRelationManager extends RelationManager
                     ->hidden(function (RelationManager $livewire) {
                         return $livewire->getOwnerRecord()->balance_due == 0;
                     }),
-                Action::make('Receipt')
-                    ->icon('heroicon-o-ticket')
-                    ->requiresConfirmation()
-                // ->action(fn (Post $record) => $record->delete())
+                // Action::make('Receipt')
+                //     ->icon('heroicon-o-ticket')
+                //     ->url(fn(Payment $payment) => route('receipt.pdf.download', 5))
+                //     ->openUrlInNewTab()
+                //     ->requiresConfirmation(),
+
+
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),

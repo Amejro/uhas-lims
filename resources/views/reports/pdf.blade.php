@@ -46,11 +46,7 @@
     <table class="lab-result-table">
 
 
-
-
         {!! tiptap_converter()->asHTML($result) !!}
-
-
 
 
     </table>

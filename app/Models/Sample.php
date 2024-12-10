@@ -114,7 +114,7 @@ class Sample extends Model
             $year = substr(date('Y'), -2);
             $month = sprintf("%02d", date('m'));
 
-            $serial = "ITAM/{$DosageCode}/{$totalSample}/{$month}/{$year}";
+            $serial = "ITAM/{$DosageCode}/{$totalSample}/{$month}-{$year}";
 
             $model->user_id = auth()->id();
             $model->status = 'collected';

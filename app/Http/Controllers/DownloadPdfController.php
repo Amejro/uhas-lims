@@ -11,7 +11,7 @@ class DownloadPdfController extends Controller
 {
     public function download(Sample $record)
     {
-        // dd($record);
+        dd($record);
 
         $sampleTest = SampleTest::where('sample_id', $record->id)->get();
         // dd($sampleTest[0]->test_result);
