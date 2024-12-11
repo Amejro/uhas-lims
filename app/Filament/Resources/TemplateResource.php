@@ -6,9 +6,11 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Template;
 use Filament\Forms\Form;
+use App\Models\DosageForm;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use FilamentTiptapEditor\TiptapEditor;
+use Filament\Support\Contracts\HasLabel;
 use Illuminate\Database\Eloquent\Builder;
 use FilamentTiptapEditor\Enums\TiptapOutput;
 use App\Filament\Resources\TemplateResource\Pages;
@@ -35,8 +37,24 @@ class TemplateResource extends Resource
                     ->relationship('test', 'name')
                     ->required(),
                 Forms\Components\Select::make('dosage_form_id')
-                    ->relationship('dosageForm', 'name')
-                    // ->multiple()
+                    // ->relationship('dosageForm', 'name')
+                    ->multiple()
+                    ->options(function () {
+
+
+                        $options = [];
+
+                        $dosages = DosageForm::all();
+
+
+                        foreach ($dosages as $dosage) {
+                            $options[$dosage['id']] = $dosage['name'];
+                        }
+
+                        return $options;
+
+
+                    })
                     ->preload()
                     ->required(),
 
@@ -70,9 +88,9 @@ class TemplateResource extends Resource
                 Tables\Columns\TextColumn::make('test.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('dosageForm.name')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('dosageForm.name')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Created by')
                     ->numeric()
@@ -118,3 +136,5 @@ class TemplateResource extends Resource
         ];
     }
 }
+
+

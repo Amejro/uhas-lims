@@ -33,7 +33,7 @@ class Template extends Model
         'id' => 'integer',
         'content' => 'array',
         'test_id' => 'integer',
-        'dosage_form_id' => 'integer',
+        'dosage_form_id' => 'array',
         'user_id' => 'integer',
     ];
 

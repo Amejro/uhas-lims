@@ -146,7 +146,7 @@ class SampleResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('dosageForm.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('quantity')
                     ->numeric()
                     ->sortable(),

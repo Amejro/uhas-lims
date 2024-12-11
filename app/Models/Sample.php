@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\SampleTest;
 use App\Events\SampleCreated;
+use App\Jobs\CopyTestTemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -127,8 +128,6 @@ class Sample extends Model
         static::created(function ($model) {
 
 
-
-
             $payment = new Payment();
 
             $payment->create([
@@ -140,6 +139,8 @@ class Sample extends Model
                 'status' => 'pending',
                 'serial_code' => $model->serial_code,
             ]);
+
+            // CopyTestTemplate::dispatch($model);
 
 
         });
