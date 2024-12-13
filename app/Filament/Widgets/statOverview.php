@@ -18,9 +18,9 @@ class statOverview extends BaseWidget
                 ->icon('heroicon-o-funnel'),
             // ->color('success'),
 
-            Stat::make('Tests', SampleTest::query()->count())
-                ->description('Total tests conducted')
-                ->icon('heroicon-o-beaker'),
+            // Stat::make('Tests', SampleTest::query()->count())
+            //     ->description('Total tests conducted')
+            //     ->icon('heroicon-o-beaker'),
             // ->color('success'),
 
             Stat::make('Producer', Producer::query()->count())

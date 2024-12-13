@@ -70,13 +70,6 @@ class PaymentReceiptController extends Controller
         ]);
 
 
-        // $sampleTest = SampleTest::where('sample_id', $record->id)->get();
-
-
-        // $pdf = Pdf::loadView('reports.pdf', ['result' => $sampleTest[0]->test_result]);
-
-        // return $pdf->download();
-
     }
 
 

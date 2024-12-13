@@ -27,10 +27,10 @@ return new class extends Migration {
             $table->timestamp('expiry_date')->nullable();
             $table->string('batch_number')->nullable();
             $table->string('serial_code')->unique();
-            $table->foreignId('storage_location_id')->constrained();
-            $table->foreignId('dosage_form_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('producer_id')->constrained();
+            $table->foreignId('storage_location_id')->constrained()->nullOnDelete();
+            $table->foreignId('dosage_form_id')->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->constrained()->nullOnDelete();
+            $table->foreignId('producer_id')->constrained()->nullOnDelete();
             $table->integer('total_cost')->nullable();
             $table->timestamps();
         });

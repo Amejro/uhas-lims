@@ -55,9 +55,11 @@ class CreateSample extends CreateRecord
                     TagsInput::make('active_ingredient')
                         ->placeholder('Enter ingredient')
                     ,
-                    Textarea::make('dosage'),
+                    TagsInput::make('dosage')->label('Dosing')
+                        ->placeholder('Enter dosing')
+                    ,
                     DatePicker::make('date_of_manufacture'),
-                    DatePicker::make('expiry_date'),
+                    DatePicker::make('expiry_date')->label('Date of expiry'),
 
                 ])->columns(2),
 

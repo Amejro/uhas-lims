@@ -57,6 +57,7 @@ class Sample extends Model
         'producer_id' => 'integer',
         'active_ingredient' => 'array',
         'indication' => 'array',
+        'dosage' => 'array',
     ];
 
     public function storageLocation(): BelongsTo

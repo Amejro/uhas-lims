@@ -36,6 +36,8 @@ class SampleResource extends Resource
 {
     protected static ?string $model = Sample::class;
 
+    // protected static ?string $recordTitleAttribute = 'number';
+
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-funnel';
 
@@ -90,7 +92,10 @@ class SampleResource extends Resource
                             ->placeholder('Enter ingredient')
                         ,
 
-                        TextInput::make('dosage'),
+                        TagsInput::make('dosage')
+                            ->placeholder('Enter ingredient')
+                            ->label('Dosing')
+                        ,
 
                         DateTimePicker::make('date_of_manufacture')
                             ->required(),

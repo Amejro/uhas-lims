@@ -16,9 +16,9 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->json('content');
-            $table->foreignId('test_id')->constrained();
+            $table->foreignId('test_id')->constrained()->nullOnDelete();
             $table->foreignId('dosage_form_id');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->timestamps();
         });
 

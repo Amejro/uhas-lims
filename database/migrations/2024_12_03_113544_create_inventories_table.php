@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -21,11 +20,11 @@ return new class extends Migration
             $table->integer('total_quantity')->nullable();
             $table->integer('reorder_level')->nullable();
             $table->timestamp('expiry_date');
-            $table->enum('status', ["available",""]);
+            $table->enum('status', ["available", ""]);
             $table->boolean('has_variant');
             $table->json('inventory_variant')->nullable();
-            $table->foreignId('storage_location_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('storage_location_id')->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->timestamps();
         });
 
