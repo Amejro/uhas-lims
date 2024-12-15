@@ -15,7 +15,7 @@ class statOverview extends BaseWidget
         return [
             Stat::make('Samples', Sample::query()->count())
                 ->description('All registed samples')
-                ->icon('heroicon-o-funnel'),
+                ->icon('fontisto-test-bottle'),
             // ->color('success'),
 
             // Stat::make('Tests', SampleTest::query()->count())

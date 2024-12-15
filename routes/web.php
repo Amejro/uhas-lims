@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\PaymentReceiptController;
 use Illuminate\Http\Response;
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DownloadPdfController;
+use App\Http\Controllers\PaymentReceiptController;
+use App\Http\Controllers\RecommendationController;
 
 Route::get('/pdf', function () {
 
@@ -44,5 +45,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/{record}/pdf', [DownloadPdfController::class, 'download'])->name('samples.pdf.download');
 
 Route::get('/{payment}/receipt', [PaymentReceiptController::class, 'download'])->name('receipt.pdf.download');
+
+Route::get('/{record}/recommendations', [RecommendationController::class, 'print'])->name('recommendations');
 
 // require __DIR__.'/auth.php';

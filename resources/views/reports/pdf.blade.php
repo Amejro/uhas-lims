@@ -988,7 +988,15 @@
         margin-top: 50px;
     }
 
-    .attachmment {}
+    .lab-result-table> :not([hidden])~ :not([hidden]) {
+        --tw-space-y-reverse: 0;
+        margin-top: calc(2.5rem
+                /* 40px */
+                * calc(1 - var(--tw-space-y-reverse)));
+        margin-bottom: calc(2.5rem
+                /* 40px */
+                * var(--tw-space-y-reverse));
+    }
 </style>
 
 

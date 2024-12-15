@@ -39,7 +39,7 @@ class SampleResource extends Resource
     // protected static ?string $recordTitleAttribute = 'number';
 
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationIcon = 'heroicon-o-funnel';
+    protected static ?string $navigationIcon = 'fontisto-test-bottle';
 
     public static function form(Form $form): Form
     {
@@ -52,7 +52,7 @@ class SampleResource extends Resource
 
                     ->schema([
                         TextInput::make('name')
-                            ->label('Sample name')
+                            ->label('Product name')
                             ->required(),
                         Select::make('dosage_form_id')
                             ->relationship('dosageForm', 'name')
@@ -231,7 +231,8 @@ class SampleResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+        ;
     }
 
     public static function getRelations(): array

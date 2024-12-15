@@ -35,13 +35,13 @@ class LatestSamples extends BaseWidget
                     ->sortable(),
                 TextColumn::make('dosageForm.name')
                     ->numeric()
-                    ->sortable()->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('quantity')
+                    //     ->sortable()->toggleable(isToggledHiddenByDefault: true),
+                    // TextColumn::make('quantity')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('collection_date')
-                    ->dateTime()
-                    ->sortable()->toggleable(isToggledHiddenByDefault: true),
+                // TextColumn::make('collection_date')
+                //     ->dateTime()
+                //     ->sortable()->toggleable(isToggledHiddenByDefault: true),
 
                 BadgeColumn::make('status')
                     ->colors([

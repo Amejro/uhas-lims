@@ -111,7 +111,7 @@ class Sample extends Model
 
             $sampleCount = Sample::all()->count();
 
-            $totalSample = sprintf("%03d", $sampleCount == 0 ? 1 : $sampleCount);
+            $totalSample = sprintf("%03d", $sampleCount == 0 ? 1 : $sampleCount + 1);
 
             $year = substr(date('Y'), -2);
             $month = sprintf("%02d", date('m'));

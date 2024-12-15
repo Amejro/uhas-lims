@@ -71,7 +71,7 @@ class PaymentResource extends Resource
                 TextColumn::make('total_amount')
                     ->label('Amount due')
                     ->money('GHS'),
-                TextColumn::make('amount_paid'),
+                TextColumn::make('amount_paid')->money('GHS'),
 
                 TextColumn::make('balance_due')
                     ->money('GHS'),
