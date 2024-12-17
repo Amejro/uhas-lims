@@ -3,76 +3,67 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Sample;
+use App\Models\Payment;
 use App\Models\Producer;
 use App\Models\SampleTest;
+use App\Models\PaymentRecord;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 class statOverview extends BaseWidget
 {
+    protected static ?int $sort = 1;
+
     protected function getStats(): array
     {
-        $startDate = !is_null($this->filters['startDate'] ?? null) ?
-            Carbon::parse($this->filters['startDate']) :
-            null;
 
-        $endDate = !is_null($this->filters['endDate'] ?? null) ?
-            Carbon::parse($this->filters['endDate']) :
-            now();
+        $startDate = !is_null($this->filters['startDate'] ?? null)
+            ? Carbon::parse($this->filters['startDate'])
+            : now()->startOfMonth();
 
-        $isBusinessCustomersOnly = $this->filters['businessCustomersOnly'] ?? null;
-        $businessCustomerMultiplier = match (true) {
-            boolval($isBusinessCustomersOnly) => 2 / 3,
-            blank($isBusinessCustomersOnly) => 1,
-            default => 1 / 3,
-        };
+        $endDate = !is_null($this->filters['endDate'] ?? null)
+            ? Carbon::parse($this->filters['endDate'])
+            : now();
 
-        $diffInDays = $startDate ? $startDate->diffInDays($endDate) : 0;
+        // Calculate the total revenue from payments
+        $totalRevenue = PaymentRecord::whereBetween('created_at', [$startDate, $endDate])
+            ->sum('amount');
 
-        $revenue = (int) (($startDate ? ($diffInDays * 137) : 192100) * $businessCustomerMultiplier);
-        $newCustomers = (int) (($startDate ? ($diffInDays * 7) : 1340) * $businessCustomerMultiplier);
-        $newOrders = (int) (($startDate ? ($diffInDays * 13) : 3543) * $businessCustomerMultiplier);
+        $unrealizedpayment = Payment::whereBetween('created_at', [$startDate, $endDate])
+            ->sum('balance_due');
 
-        $formatNumber = function (int $number): string {
+        $pendingPayments = Payment::whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 'pending')
+            ->sum('total_amount');
+
+
+
+        // Number formatting helper
+        $formatNumber = function ($number) {
             if ($number < 1000) {
-                return (string) Number::format($number, 0);
+                return (string) number_format($number, 0);
             }
-
             if ($number < 1000000) {
-                return Number::format($number / 1000, 2) . 'k';
+                return number_format($number / 1000, 2) . 'k';
             }
-
-            return Number::format($number / 1000000, 2) . 'm';
+            return number_format($number / 1000000, 2) . 'm';
         };
+
+
 
         return [
-            Stat::make('Revenue', '$' . $formatNumber($revenue))
-                ->description('32k increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart([7, 2, 10, 3, 15, 4, 17])
+            // Total Revenue Stat
+            Stat::make('Revenue', 'GH₵' . $formatNumber($totalRevenue))
                 ->color('success'),
-            Stat::make('New customers', $formatNumber($newCustomers))
-                ->description('3% decrease')
-                ->descriptionIcon('heroicon-m-arrow-trending-down')
-                ->chart([17, 16, 14, 15, 14, 13, 12])
-                ->color('danger'),
-            Stat::make('New orders', $formatNumber($newOrders))
-                ->description('7% increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart([15, 4, 10, 2, 12, 4, 12])
-                ->color('success'),
+
+            Stat::make('Unrealized Payment', 'GH₵' . $formatNumber($unrealizedpayment))
+                ->color('info'),
+
+            Stat::make('Pending Payments', 'GH₵' . $formatNumber($pendingPayments))
+                ->color('info'),
         ];
 
-        // return [
-        //     // Stat::make('Samples', Sample::query()->count())
-        //     //     ->description('All registed samples')
-        //     //     ->icon('fontisto-test-bottle'),
-
-
-        //     // Stat::make('Producer', Producer::query()->count())
-        //     //     ->description('Total producers')
-        //     //     ->icon('heroicon-o-building-office-2'),
-        // ];
     }
 }

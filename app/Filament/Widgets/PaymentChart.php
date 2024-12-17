@@ -13,6 +13,7 @@ class PaymentChart extends ChartWidget
 {
     protected static ?string $heading = 'Revenue';
 
+    protected static ?int $sort = 2;
 
     public ?string $filter = 'today';
 
