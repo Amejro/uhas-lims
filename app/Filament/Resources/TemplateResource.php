@@ -37,20 +37,15 @@ class TemplateResource extends Resource
                     ->relationship('test', 'name')
                     ->required(),
                 Forms\Components\Select::make('dosage_form_id')
+                ->label('Dosage form')
                     // ->relationship('dosageForm', 'name')
                     ->multiple()
                     ->options(function () {
-
-
                         $options = [];
-
                         $dosages = DosageForm::all();
-
-
                         foreach ($dosages as $dosage) {
                             $options[$dosage['id']] = $dosage['name'];
                         }
-
                         return $options;
 
 

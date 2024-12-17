@@ -45,8 +45,14 @@ class PaymentRecord extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            // ->logOnly(['user_id', 'amount']);
-            ->logOnlyDirty();
+        ->logOnly(['amount',
+        'payment_method',
+        'transaction_id',
+        'note'])
+            ->logOnlyDirty()
+            ->logOnlyDirty()
+            ->useLogName('payment')
+            ->dontSubmitEmptyLogs();
     }
 
     public function payment(): BelongsTo
@@ -62,8 +68,11 @@ class PaymentRecord extends Model
     protected static function booted()
     {
         static::creating(function ($model) {
+
             $model->user_id = auth()->id();
-            // dd($model);
+            $model->transaction_id = '';
+
+            // dd($model);transaction_id
 
         });
 

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Sample;
-use Illuminate\Http\Response;
 
+use Illuminate\Http\Response;
 use Spatie\Browsershot\Browsershot;
 
 class DownloadPdfController extends Controller
@@ -13,21 +14,17 @@ class DownloadPdfController extends Controller
     {
 
         $tests = $record->tests()->get();
-
-
-
         $producer = $record->producer()->first();
         $dosageForm = $record->dosageForm()->first();
-
-
+        $user = User::find(auth()->id());
+        
 
         $data = [
-
             'sample' => $record,
             'tests' => $tests,
             'producer' => $producer,
-            'dosageForm' => $dosageForm
-
+            'dosageForm' => $dosageForm,
+            'user'=> $user
         ];
 
 

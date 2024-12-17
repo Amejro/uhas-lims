@@ -45,4 +45,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function roles(){
+        return $this->belongsToMany(Role::class)->withPivot('user_id', 'role_id');
+    }
+    public function hasPermission(string $permission) : bool{
+        // return $this->roles()->where('permissions', 'LIKE', "%{$permission}%")->exists();
+
+        $permissionArray = [];
+        foreach($this->roles as $role){
+            foreach($role->permissions as $singlepermission){
+                $permissionArray[] = $singlepermission->name;
+
+            }
+
+        }
+      return collect($permissionArray)->unique()->contains($permission);
+
+    }
+
 }

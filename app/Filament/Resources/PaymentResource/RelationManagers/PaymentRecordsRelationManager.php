@@ -68,7 +68,7 @@ class PaymentRecordsRelationManager extends RelationManager
                 ,
                 TextInput::make('payment_method')
                     ->required(),
-                TextInput::make('transaction_id'),
+                // TextInput::make('transaction_id'),
                 TextInput::make('note'),
                 TextInput::make('payment_id')->default(function (RelationManager $livewire): string {
                     return $livewire->getOwnerRecord()->id;

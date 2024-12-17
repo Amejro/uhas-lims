@@ -1,15 +1,20 @@
 models:
-  Test:
+  roles:
     name: string
-    description: text nullable
-    price: integer
-    # template_id: id foreign:templates
-    user_id: id foreign:users # user who created the test
-    timestamps: true
+    user_id: id foreign:users
     relationships:
-      hasMany: Template
-      # belongsTo: Template
-      belongsToMany: Sample, Inventory
+      belongsToMany: Permission,User
+
+  permissions:
+    name: string
+    user_id: id foreign:users
+    relationships:
+      belongsToMany: User
+
+
+
+
+
 
   Inventory:
     name: string
@@ -29,88 +34,3 @@ models:
       belongsToMany: Test
 
   Sample:
-    name: string
-    quantity: integer
-    collection_date: timestamp
-    active_ingredient: array nullable
-    delivered_by: string
-    deliverer_contact: string
-    indication: array nullable # updated
-    status: enum:collected,in_progress,completed
-    dosage: array nullable
-    date_of_manufacture: timestamp
-    expiry_date: timestamp
-    batch_number: string
-    serial_code: string nullable # Auto generated
-    storage_location_id: id foreign:storage_locations
-    dosage_form_id: id foreign:dosage_forms
-    user_id: id foreign:users # user who created the sample
-    producer_id: id foreign:producers
-    total_cost: integer nullable
-    timestamps: true
-    relationships:
-      belongsTo: StorageLocation,DosageForm,Producer
-      belongsToMany: Test
-      hasMany: Payment,Report
-
-  Payment:
-    amount: integer
-    status: enum:unpaid, paid
-    sample_id: id foreign:Sample
-    user_id: id foreign:users # user who created the payment
-    timestamps: true
-    relationships:
-      belongsTo: Sample
-
-  DosageForm:
-    name: string
-    code: string
-    timestamps: true
-    relationships:
-      hasMany: Sample
-      # belongsTo: Template
-
-  Template:
-    name: string
-    content: json
-    test_id: id foreign:tests
-    dosage_form_id: id foreign:dosage_forms
-    user_id: id foreign:users
-    timestamps: true
-    relationships:
-      hasMany: DosageForm
-      belongsTo: Test
-
-  StorageLocation:
-    room: string
-    freezer: string nullable
-    shelf: string nullable
-    timestamps: true
-    relationships:
-      hasMany: Sample,Inventory
-
-  # Test:
-  #   conducted_by: id foreign:users
-  #   test_content: json nullable
-  #   timestamps: true
-  #   relationships:
-  #     belongsTo: TestCategory
-
-  Producer:
-    name: string
-    address: string
-    gps_address: string nullable
-    phone: string
-    email: string nullable
-    user_id: id foreign:users # user who created the organization
-    timestamps: true
-    relationships:
-      hasMany: Sample
-
-  Report:
-    sample_id: id foreign:samples
-    report_date: timestamp
-    user_id: id foreign:users # user who created the report
-    timestamps: true
-    relationships:
-      belongsTo: Sample

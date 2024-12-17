@@ -25,8 +25,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\BadgeColumn;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DatePicker;
 
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\SampleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -106,7 +107,7 @@ class SampleResource extends Resource
                             ->label('Dosing')
                         ,
 
-                        DateTimePicker::make('date_of_manufacture')
+                        DatePicker::make('date_of_manufacture')
                             ->required(),
                         DateTimePicker::make('expiry_date')
                             ->required(),
@@ -120,7 +121,7 @@ class SampleResource extends Resource
                         TextInput::make('deliverer_contact')
                             ->required(),
 
-                        DateTimePicker::make('collection_date')
+                            DatePicker::make('collection_date')
                             ->required(),
                         Select::make('storage_location_id')
                             ->relationship('storageLocation', 'room')
