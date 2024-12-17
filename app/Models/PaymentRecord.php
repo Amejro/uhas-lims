@@ -6,10 +6,13 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class PaymentRecord extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +37,17 @@ class PaymentRecord extends Model
         'payment_id' => 'integer',
         'user_id' => 'integer',
     ];
+
+
+
+
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            // ->logOnly(['user_id', 'amount']);
+            ->logOnlyDirty();
+    }
 
     public function payment(): BelongsTo
     {

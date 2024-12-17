@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\SampleTest;
 use App\Events\SampleCreated;
 use App\Jobs\CopyTestTemplate;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Sample extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -59,6 +62,30 @@ class Sample extends Model
         'indication' => 'array',
         'dosage' => 'array',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'quantity',
+                'collection_date',
+                'active_ingredient',
+                'delivered_by',
+                'deliverer_contact',
+                'indication',
+                'status',
+                'dosage',
+                'date_of_manufacture',
+                'expiry_date',
+                'batch_number',
+                'serial_code',
+
+            ])
+            ->logOnlyDirty()
+            ->useLogName('sample')
+            ->dontSubmitEmptyLogs();
+    }
 
     public function storageLocation(): BelongsTo
     {

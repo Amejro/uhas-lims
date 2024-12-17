@@ -26,20 +26,29 @@ use Filament\Support\Contracts\HasLabel;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Database\Eloquent\Builder;
+
 use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\SampleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SampleResource\RelationManagers;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 use App\Filament\Resources\SampleResource\RelationManagers\TestsRelationManager;
 
 class SampleResource extends Resource
 {
+
     protected static ?string $model = Sample::class;
 
     // protected static ?string $recordTitleAttribute = 'number';
 
     protected static ?int $navigationSort = 1;
+
     protected static ?string $navigationIcon = 'fontisto-test-bottle';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -220,7 +229,8 @@ class SampleResource extends Resource
                     // ->url(fn(Sample $record) => route('samples.pdf.download', $record))
                     // ->openUrlInNewTab()
 
-                ])
+                ]),
+                ActivityLogTimelineTableAction::make('Activities'),
 
             ])->recordUrl(function (Model $record) {
 

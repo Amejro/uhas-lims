@@ -11,7 +11,7 @@ use Filament\Widgets\ChartWidget;
 
 class PaymentChart extends ChartWidget
 {
-    protected static ?string $heading = 'Total customers';
+    protected static ?string $heading = 'Revenue';
 
 
     public ?string $filter = 'today';
