@@ -10,11 +10,18 @@ use App\Models\PaymentRecord;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+
+
 
 class statOverview extends BaseWidget
 {
-    protected static ?int $sort = 1;
+    use InteractsWithPageFilters;
+    // protected static ?int $sort = 1;
+    protected static ?int $sort = 0;
+
 
     protected function getStats(): array
     {
@@ -26,6 +33,17 @@ class statOverview extends BaseWidget
         $endDate = !is_null($this->filters['endDate'] ?? null)
             ? Carbon::parse($this->filters['endDate'])
             : now();
+
+        // $startDate = ($this->filters['startDate'] ?? null) !== null
+        //     ? Carbon::parse($this->filters['startDate'])
+        //     : now()->startOfMonth();
+
+        // $endDate = ($this->filters['endDate'] ?? null) !== null
+        //     ? Carbon::parse($this->filters['endDate'])
+        //     : now();
+
+
+
 
         // Calculate the total revenue from payments
         $totalRevenue = PaymentRecord::whereBetween('created_at', [$startDate, $endDate])

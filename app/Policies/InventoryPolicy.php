@@ -13,7 +13,7 @@ class InventoryPolicy
      */
     public function viewAny(User $user): bool
     {
-                return $user->hasPermission('Inventory_access');
+        return $user->hasPermission('Inventory_access');
 
     }
 
@@ -22,7 +22,7 @@ class InventoryPolicy
      */
     public function view(User $user, Inventory $inventory): bool
     {
-                return $user->hasPermission('Inventory_show');
+        return $user->hasPermission('Inventory_show');
 
     }
 
@@ -31,7 +31,7 @@ class InventoryPolicy
      */
     public function create(User $user): bool
     {
-                return $user->hasPermission('Inventory_create');
+        return $user->hasPermission('Inventory_create');
 
     }
 
@@ -40,7 +40,7 @@ class InventoryPolicy
      */
     public function update(User $user, Inventory $inventory): bool
     {
-                return $user->hasPermission('Inventory_edit');
+        return $user->hasPermission('Inventory_edit');
 
     }
 
@@ -49,7 +49,7 @@ class InventoryPolicy
      */
     public function delete(User $user, Inventory $inventory): bool
     {
-                return $user->hasPermission('Inventory_delete');
+        return $user->hasPermission('Inventory_delete');
 
     }
 
@@ -58,7 +58,7 @@ class InventoryPolicy
      */
     public function restore(User $user, Inventory $inventory): bool
     {
-                rreturn false;
+        return false;
 
     }
 

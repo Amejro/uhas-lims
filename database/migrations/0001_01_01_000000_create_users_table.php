@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,6 +16,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('role_id')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('reset_default_password')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -24,6 +26,12 @@ return new class extends Migration
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
+            $table->timestamp('created_at')->nullable();
+        });
+
+        Schema::create('default_password', function (Blueprint $table) {
+            $table->foreignId('user_id');
+            $table->string('default');
             $table->timestamp('created_at')->nullable();
         });
 
@@ -44,6 +52,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('default_password');
         Schema::dropIfExists('sessions');
     }
 };

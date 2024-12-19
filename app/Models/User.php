@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'roles',
+        // 'roles',
     ];
 
     /**
@@ -46,31 +46,33 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany(Role::class)->withPivot('user_id', 'role_id');
     }
-    public function hasPermission(string $permission) : bool{
+    public function hasPermission(string $permission): bool
+    {
         // return $this->roles()->where('permissions', 'LIKE', "%{$permission}%")->exists();
 
         $permissionArray = [];
-        foreach($this->roles as $role){
-            foreach($role->permissions as $singlepermission){
+        foreach ($this->roles as $role) {
+            foreach ($role->permissions as $singlepermission) {
                 $permissionArray[] = $singlepermission->name;
 
             }
 
         }
-      return collect($permissionArray)->unique()->contains($permission);
+        return collect($permissionArray)->unique()->contains($permission);
 
     }
 
     public static function booted()
     {
-        static::created(function ($model) {
-            $model->user_id = auth()->id();
-        });
+        // static::created(function ($model) {
+        //     $model->user_id = auth()->id();
+        // });
 
-        
+
     }
 
 }
