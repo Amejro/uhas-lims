@@ -13,7 +13,7 @@ class StorageLocationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasPermission('StorageLocation_access');
     }
 
     /**
@@ -21,7 +21,7 @@ class StorageLocationPolicy
      */
     public function view(User $user, StorageLocation $storageLocation): bool
     {
-        return false;
+        return $user->hasPermission('StorageLocation_show');
     }
 
     /**
@@ -29,7 +29,7 @@ class StorageLocationPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasPermission('StorageLocation_create');
     }
 
     /**
@@ -37,7 +37,7 @@ class StorageLocationPolicy
      */
     public function update(User $user, StorageLocation $storageLocation): bool
     {
-        return false;
+        return $user->hasPermission('StorageLocation_edit');
     }
 
     /**
@@ -45,7 +45,7 @@ class StorageLocationPolicy
      */
     public function delete(User $user, StorageLocation $storageLocation): bool
     {
-        return false;
+        return $user->hasPermission('StorageLocation_delete');
     }
 
     /**

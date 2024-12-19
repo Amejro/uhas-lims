@@ -102,12 +102,12 @@ class PaymentRecordsRelationManager extends RelationManager
                 CreateAction::make()->slideOver()
                     ->hidden(function (RelationManager $livewire) {
                         return $livewire->getOwnerRecord()->balance_due == 0;
-                    }),
-                // Action::make('Receipt')
-                //     ->icon('heroicon-o-ticket')
-                //     ->url(fn(Payment $payment) => route('receipt.pdf.download', 5))
-                //     ->openUrlInNewTab()
-                //     ->requiresConfirmation(),
+                    })
+                    
+                    ->after(function (RelationManager $livewire) {
+                        $livewire->dispatch('refreshForm');                    })
+                    ,
+ 
 
 
             ])

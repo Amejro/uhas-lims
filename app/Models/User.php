@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'roles',
     ];
 
     /**
@@ -61,6 +62,15 @@ class User extends Authenticatable
         }
       return collect($permissionArray)->unique()->contains($permission);
 
+    }
+
+    public static function booted()
+    {
+        static::created(function ($model) {
+            $model->user_id = auth()->id();
+        });
+
+        
     }
 
 }

@@ -13,7 +13,7 @@ class DosageFormPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasPermission('DosageForm_access');
     }
 
     /**
@@ -21,7 +21,7 @@ class DosageFormPolicy
      */
     public function view(User $user, DosageForm $dosageForm): bool
     {
-        return false;
+        return $user->hasPermission('DosageForm_show');
     }
 
     /**
@@ -29,7 +29,7 @@ class DosageFormPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasPermission('DosageForm_create');
     }
 
     /**
@@ -37,7 +37,7 @@ class DosageFormPolicy
      */
     public function update(User $user, DosageForm $dosageForm): bool
     {
-        return false;
+        return $user->hasPermission('DosageForm_edit');
     }
 
     /**
@@ -45,7 +45,7 @@ class DosageFormPolicy
      */
     public function delete(User $user, DosageForm $dosageForm): bool
     {
-        return false;
+        return $user->hasPermission('DosageForm_delete');
     }
 
     /**

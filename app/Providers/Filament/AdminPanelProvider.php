@@ -69,7 +69,9 @@ class AdminPanelProvider extends PanelProvider
             ])
 
             ->plugins([
-                ActivitylogPlugin::make(),
+                ActivitylogPlugin::make()
+                ->navigationGroup('Settings & Logs')
+                ,
             ])
             ->authMiddleware([
                 Authenticate::class,

@@ -26,4 +26,9 @@ class ViewPayment extends ViewRecord
                 ->requiresConfirmation()
         ];
     }
+
+    #[On('refreshForm')]
+    public function refresh(): void
+    {
+    }
 }

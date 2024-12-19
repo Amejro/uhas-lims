@@ -2,26 +2,26 @@
 
 namespace App\Policies;
 
-use App\Models\Sample;
+use App\Models\Template;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class SamplePolicy
+class TemplatePolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasPermission('Template_access');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Sample $sample): bool
+    public function view(User $user, Template $template): bool
     {
-        return false;
+        return $user->hasPermission('Template_show');
     }
 
     /**
@@ -29,29 +29,29 @@ class SamplePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasPermission('Template_create');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Sample $sample): bool
+    public function update(User $user, Template $template): bool
     {
-        return false;
+        return $user->hasPermission('Template_edit');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Sample $sample): bool
+    public function delete(User $user, Template $template): bool
     {
-        return false;
+        return $user->hasPermission('Template_delete');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Sample $sample): bool
+    public function restore(User $user, Template $template): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class SamplePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Sample $sample): bool
+    public function forceDelete(User $user, Template $template): bool
     {
         return false;
     }

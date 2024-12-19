@@ -61,6 +61,7 @@ class Sample extends Model
         'active_ingredient' => 'array',
         'indication' => 'array',
         'dosage' => 'array',
+        'test'=>'array',
     ];
 
     public function getActivitylogOptions(): LogOptions

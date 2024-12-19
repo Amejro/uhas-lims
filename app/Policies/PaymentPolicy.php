@@ -2,26 +2,28 @@
 
 namespace App\Policies;
 
-use App\Models\Producer;
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class ProducerPolicy
+class PaymentPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+                        return $user->hasPermission('Payment_access');
+
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Producer $producer): bool
+    public function view(User $user, Payment $payment): bool
     {
-        return false;
+                        return $user->hasPermission('Payment_show');
+
     }
 
     /**
@@ -29,29 +31,32 @@ class ProducerPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+                        return $user->hasPermission('Payment_create');
+
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Producer $producer): bool
+    public function update(User $user, Payment $payment): bool
     {
-        return false;
+                        return $user->hasPermission('Payment_edit');
+
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Producer $producer): bool
+    public function delete(User $user, Payment $payment): bool
     {
-        return false;
+                        return $user->hasPermission('Payment_delete');
+
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Producer $producer): bool
+    public function restore(User $user, Payment $payment): bool
     {
         return false;
     }
@@ -59,7 +64,7 @@ class ProducerPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Producer $producer): bool
+    public function forceDelete(User $user, Payment $payment): bool
     {
         return false;
     }

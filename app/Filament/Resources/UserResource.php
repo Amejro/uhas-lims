@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
+use App\Models\Role;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -18,7 +19,10 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Settings & Logs';
+
+
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
@@ -32,6 +36,13 @@ class UserResource extends Resource
                 Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
                     ->password()
+                    ->required(),
+                Forms\Components\Select::make('roles')
+                    ->options(
+                        Role::all()->pluck('name', 'id')
+                    )
+                    // ->multiple()
+                    // ->relationship(User::class, 'roles')
                     ->required(),
             ]);
     }
