@@ -50,6 +50,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class)->withPivot('user_id', 'role_id');
     }
+    public function hasRole(string $role): bool
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
     public function hasPermission(string $permission): bool
     {
         // return $this->roles()->where('permissions', 'LIKE', "%{$permission}%")->exists();

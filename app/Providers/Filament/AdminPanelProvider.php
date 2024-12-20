@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('/')
             ->login()
-            ->profile(isSimple: false)
+            // ->profile(isSimple: false)
             ->passwordReset()
             ->colors([
                 'primary' => Color::Green,
@@ -75,7 +75,15 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 ActivitylogPlugin::make()
                     ->navigationGroup('Settings & Logs')
-                ,
+                    ->authorize(
+                        function () {
+                            if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator')) {
+                                return true;
+                            }
+                            return false;
+                        }
+                        
+                    ),
             ])
             ->authMiddleware([
                 Authenticate::class,

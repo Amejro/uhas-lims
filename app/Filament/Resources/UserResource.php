@@ -37,13 +37,13 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required(),
-                Forms\Components\Select::make('roles')
-                    ->options(
-                        Role::all()->pluck('name', 'id')
-                    )
+                // Forms\Components\Select::make('roles')
+                //     ->options(
+                //         Role::all()->pluck('name', 'id')
+                //     )
                     // ->multiple()
                     // ->relationship(User::class, 'roles')
-                    ->required(),
+                    // ->required(),
             ]);
     }
 

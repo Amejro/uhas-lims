@@ -22,25 +22,36 @@ class statOverview extends BaseWidget
     // protected static ?int $sort = 1;
     protected static ?int $sort = 0;
 
+    public static function canView(): bool
+{
+   
+    if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
+        return true;
+    }
+    return false;
+    
+    
+}
+
 
     protected function getStats(): array
     {
 
-        $startDate = !is_null($this->filters['startDate'] ?? null)
-            ? Carbon::parse($this->filters['startDate'])
-            : now()->startOfMonth();
-
-        $endDate = !is_null($this->filters['endDate'] ?? null)
-            ? Carbon::parse($this->filters['endDate'])
-            : now();
-
-        // $startDate = ($this->filters['startDate'] ?? null) !== null
+        // $startDate = !is_null($this->filters['startDate'] ?? null)
         //     ? Carbon::parse($this->filters['startDate'])
         //     : now()->startOfMonth();
 
-        // $endDate = ($this->filters['endDate'] ?? null) !== null
+        // $endDate = !is_null($this->filters['endDate'] ?? null)
         //     ? Carbon::parse($this->filters['endDate'])
         //     : now();
+
+        $startDate = ($this->filters['startDate'] ?? null) !== null
+            ? Carbon::parse($this->filters['startDate'])
+            : now()->startOfMonth();
+
+        $endDate = ($this->filters['endDate'] ?? null) !== null
+            ? Carbon::parse($this->filters['endDate'])
+            : now();
 
 
 

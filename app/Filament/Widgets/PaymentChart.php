@@ -17,6 +17,15 @@ class PaymentChart extends ChartWidget
 
     public ?string $filter = 'today';
 
+    public static function canView(): bool
+    {
+        if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
+            return true;
+        }
+        return false;
+        
+        
+    }
 
 
     protected function getData(): array

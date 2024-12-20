@@ -10,6 +10,7 @@ use FilamentTiptapEditor\TiptapEditor;
 use Illuminate\Support\ServiceProvider;
 use App\Listeners\SendSampleNotification;
 use App\Listeners\SendSampleCreatedNotification;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::policy(Activity::class, ActivityPolicy::class);
 
 
     }
