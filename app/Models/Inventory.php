@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Inventory extends Model
@@ -21,13 +22,14 @@ class Inventory extends Model
         'description',
         'unit',
         'total_quantity',
+        'restock_quantity',
         'reorder_level',
         'expiry_date',
         'status',
-        'has_variant',
-        'inventory_variant',
+        'item_variant',
         'storage_location_id',
         'user_id',
+
     ];
 
     /**
@@ -38,11 +40,17 @@ class Inventory extends Model
     protected $casts = [
         'id' => 'integer',
         'expiry_date' => 'timestamp',
-        'has_variant' => 'boolean',
-        'inventory_variant' => 'array',
+        'item_variant' => 'array',
         'storage_location_id' => 'integer',
         'user_id' => 'integer',
+        'total_quantity' => 'integer',
+        'restock_quantity' => 'integer',
+        'reorder_level' => 'integer',
     ];
+
+
+    protected $variants;
+    protected $totalQuantity;
 
     public function storageLocation(): BelongsTo
     {
@@ -57,5 +65,70 @@ class Inventory extends Model
     public function tests(): BelongsToMany
     {
         return $this->belongsToMany(Test::class);
+    }
+
+    public function stockHistories(): HasMany
+    {
+        return $this->hasMany(StockHistory::class);
+    }
+
+
+
+    protected static function booted()
+    {
+        static::creating(function ($model) use (&$variants, &$totalQuantity) {
+
+
+
+            $variants = $model->item_variant;
+            $totalQuantity = $model->total_quantity;
+
+            $model->user_id = auth()->id();
+            $model->status = 'available';
+            $model->item_variant = null;
+            $model->restock_quantity = null;
+        });
+
+
+
+        static::created(function ($model) use (&$variants, &$totalQuantity) {
+
+
+
+
+            $history = new StockHistory();
+
+            $history->create([
+                'inventory_id' => $model->id,
+                'item_variant' => $variants,
+                'action' => $model->total_quantity > 0 ? 'addition' : 'deduction',
+                'total_quantity' => $totalQuantity,
+                'user_id' => auth()->id(),
+            ]);
+
+
+        });
+
+        static::updating(function ($model) {
+
+            $history = new StockHistory();
+
+            $history->create([
+                'inventory_id' => $model->id,
+                'item_variant' => $model->item_variant,
+                'action' => $model->total_quantity > 0 ? 'addition' : 'deduction',
+                'total_quantity' => $model->restock_quantity,
+                'user_id' => auth()->id(),
+            ]);
+
+            $model->user_id = auth()->id();
+            $model->total_quantity += $model->restock_quantity; // restock_quantity is the new quantity to be added to the total_quantity
+
+            $model->item_variant = null;
+            $model->restock_quantity = null;
+
+        });
+
+
     }
 }

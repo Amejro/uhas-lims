@@ -3,26 +3,28 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Notifications\Collection;
 use Filament\Tables;
 use ReflectionClass;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Models\Inventory;
+use function Livewire\on;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Livewire\Component as Livewire;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Section;
+use Filament\Notifications\Collection;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Actions\Action;
 use App\Filament\Resources\InventoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\InventoryResource\RelationManagers;
-use function Livewire\on;
+use App\Filament\Resources\InventoryResource\RelationManagers\StockHistoryRelationManager;
 
 
 class InventoryResource extends Resource
@@ -51,6 +53,7 @@ class InventoryResource extends Resource
                                         'kg' => 'kg',
                                         'mL' => 'mL',
                                         'L' => 'L',
+
                                     ]
                                 )
 
@@ -84,16 +87,12 @@ class InventoryResource extends Resource
                                 ->columnSpanFull(),
 
 
-                            Forms\Components\TextInput::make('reorder_level')
-                                ->numeric(),
+
                             Forms\Components\DatePicker::make('expiry_date')
                                 ->required(),
 
                             Forms\Components\Select::make('storage_location_id')
                                 ->relationship('storageLocation', 'id')
-                                ->required(),
-                            Forms\Components\Select::make('user_id')
-                                ->relationship('user', 'name')
                                 ->required(),
 
 
@@ -132,29 +131,76 @@ class InventoryResource extends Resource
                                         ->required(),
                                 ])
 
+
+
                                 ->columns(3)
-                                ->addAction(function (Get $get, Set $set) {
+                                ->addAction(function (Get $get, Set $set, $record) {
+
+                                    if (!$record) {
+                                        $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+
+                                        $set('total_quantity', $total);
+                                    }
+
                                     $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
 
-                                    $set('total_quantity', $total);
+                                    $set('restock_quantity', $total);
 
                                 })
 
+                                ->deleteAction(function (Action $action) {
+                                    $action->after(function (Get $get, Set $set, $record) {
+                                        if (!$record) {
+                                            $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+
+                                            $set('total_quantity', $total);
+                                        }
+
+                                        $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+
+                                        $set('restock_quantity', $total);
+                                    });
+                                })
+
+
 
                                 ->columnSpanFull(),
+
                         ])->columns(2),
 
                     Section::make([
                         Forms\Components\TextInput::make('total_quantity')
+                            ->label(function ($record) {
+                                return $record ? 'Available Quantity' : 'Total Quantity';
+                            })
                             ->suffix(function (Get $get) {
                                 return $get('unit');
 
                             })
                             ->live()
-                            ->disabled()
+                            ->readOnly()
                             ->numeric(),
-                        Forms\Components\TextInput::make('status')
-                            ->required(),
+
+                        Forms\Components\TextInput::make('reorder_level')
+                            ->suffix(function (Get $get) {
+                                return $get('unit');
+
+                            })
+                            ->numeric(),
+
+                        Forms\Components\TextInput::make('restock_quantity')
+                            ->suffix(function (Get $get) {
+                                return $get('unit');
+
+                            })
+                            ->hidden(function ($record) {
+                                return !$record;
+                            })
+                            ->live()
+                            ->readOnly()
+                            ->numeric(),
+
+
                     ])->grow(false),
 
 
@@ -176,26 +222,32 @@ class InventoryResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('unit')
-                    ->searchable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('total_quantity')
-                    ->numeric()
-                    ->sortable(),
+                    ->suffix(function ($record) {
+                        return $record->unit;
+                    })
+                    ->numeric(),
                 Tables\Columns\TextColumn::make('reorder_level')
                     ->numeric()
-                    ->sortable(),
+                    ->suffix(function ($record) {
+                        return $record->unit;
+                    })
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('expiry_date')
-                    ->dateTime()
+                    ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
-                Tables\Columns\IconColumn::make('has_variant')
-                    ->boolean(),
+
                 Tables\Columns\TextColumn::make('storageLocation.id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Created By')
+                    ->searchable()
                     ->numeric()
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -222,7 +274,7 @@ class InventoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            StockHistoryRelationManager::class,
         ];
     }
 
