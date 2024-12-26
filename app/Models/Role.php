@@ -27,18 +27,18 @@ class Role extends Model
     protected $casts = [
         'id' => 'integer',
     ];
-    const SUPER_AMINISTRATOR = 'Super Administrator';
-    const AMINISTRATOR = 'Administrator';
-    const HOD = 'HOD';
-    const EXAMINER = 'Examiner';
-    const STUDENT = 'Student';
+    // const SUPER_AMINISTRATOR = 'Super Administrator';
+    // const AMINISTRATOR = 'Administrator';
+    // const HOD = 'HOD';
+    // const EXAMINER = 'Examiner';
+    // const STUDENT = 'Student';
 
-    const ROLES = [
-        'Administrator' => 'Administrator',
-        'HOD' => 'HOD',
-        'Student' => 'Student',
-        'Supervisor' => 'Supervisor',
-    ];
+    // const ROLES = [
+    //     'Administrator' => 'Administrator',
+    //     'HOD' => 'HOD',
+    //     'Student' => 'Student',
+    //     'Supervisor' => 'Supervisor',
+    // ];
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);
@@ -50,9 +50,9 @@ class Role extends Model
     }
 
     protected static function booted()
-{
-    static::creating(function ($model) {
-        $model->user_id = auth()->id();
-    });
-}
+    {
+        static::creating(function ($model) {
+            $model->user_id = auth()->id();
+        });
+    }
 }

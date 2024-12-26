@@ -29,11 +29,7 @@ return new class extends Migration {
             $table->timestamp('created_at')->nullable();
         });
 
-        Schema::create('default_password', function (Blueprint $table) {
-            $table->foreignId('user_id');
-            $table->string('default');
-            $table->timestamp('created_at')->nullable();
-        });
+
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();

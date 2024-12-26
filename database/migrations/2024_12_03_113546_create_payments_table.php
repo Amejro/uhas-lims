@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('serial_code')->unique();
             $table->decimal('balance_due', 10, 2);
             $table->enum('status', ["pending", "part payment", "paid"])->default("pending");
-            $table->foreignId('sample_id')->constrained('Samples')->nullOnDelete();
+            $table->foreignId('sample_id')->constrained()->nullOnDelete();
             $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->timestamps();
         });
@@ -30,7 +30,7 @@ return new class extends Migration {
             $table->string('payment_method');
             $table->string('transaction_id')->nullable();
             $table->string('note')->nullable();
-            $table->foreignId('payment_id')->constrained('Payments')->nullOnDelete();
+            $table->foreignId('payment_id')->constrained()->nullOnDelete();
             $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->timestamps();
         });

@@ -8,6 +8,7 @@ use App\Models\DosageForm;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,8 +20,9 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('admin'),
         ]);
 
 
@@ -37,14 +39,14 @@ class DatabaseSeeder extends Seeder
 
 
         Test::insert([
-            ['name' => 'Pharmacognosy', 'price' => 0, 'description' => '', 'created_by' => 1],
-            ['name' => 'Pharmacognosy (with mineral content )', 'description' => '', 'price' => 0, 'created_by' => 1],
-            ['name' => 'Microbiology', 'price' => 0, 'description' => '', 'created_by' => 'Eli'],
-            ['name' => 'Microbiology (with antimicrobial activity)', 'price' => 0, 'description' => '', 'created_by' => 1],
-            ['name' => 'Pharmacology and Toxicology', 'price' => 0, 'description' => '', 'created_by' => 'Eli'],
-            ['name' => 'Pharmacology and Toxicology (with sub acute and Bio activity test)', 'price' => 0, 'description' => '', 'created_by' => 'Eli'],
-            ['name' => 'Pharmacology and Toxicology (with sub acute)', 'price' => 0, 'description' => '', 'created_by' => 1],
-            ['name' => 'Pharmacology and Toxicology (with Bio activity test)', 'price' => 0, 'description' => '', 'created_by' => 1],
+            ['name' => 'Pharmacognosy', 'price' => 0, 'description' => '', 'user_id' => 1],
+            ['name' => 'Pharmacognosy (with mineral content )', 'description' => '', 'price' => 0, 'user_id' => 1],
+            ['name' => 'Microbiology', 'price' => 0, 'description' => '', 'user_id' => 1],
+            ['name' => 'Microbiology (with antimicrobial activity)', 'price' => 0, 'description' => '', 'user_id' => 1],
+            ['name' => 'Pharmacology and Toxicology', 'price' => 0, 'description' => '', 'user_id' => 1],
+            ['name' => 'Pharmacology and Toxicology (with sub acute and Bio activity test)', 'price' => 0, 'description' => '', 'user_id' => 1],
+            ['name' => 'Pharmacology and Toxicology (with sub acute)', 'price' => 0, 'description' => '', 'user_id' => 1],
+            ['name' => 'Pharmacology and Toxicology (with Bio activity test)', 'price' => 0, 'description' => '', 'user_id' => 1],
         ]);
 
         Permission::insert([

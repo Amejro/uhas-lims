@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('price');
-            $table->foreignId('user_id')->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
 

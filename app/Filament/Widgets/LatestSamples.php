@@ -16,15 +16,15 @@ class LatestSamples extends BaseWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    public static function canView(): bool
-    {
-        if (auth()->user()->hasRole('Accountant')) {
-            return false;
-        }
-        return true;
-        
-        
-    }
+    // public static function canView(): bool
+    // {
+    //     if (auth()->user()->hasRole('Accountant')) {
+    //         return false;
+    //     }
+    //     return true;
+
+
+    // }
 
     protected static ?int $sort = 3;
     public function table(Table $table): Table

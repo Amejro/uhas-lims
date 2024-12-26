@@ -14,16 +14,16 @@ use Filament\Widgets\TableWidget as BaseWidget;
 class LatestPayments extends BaseWidget
 {
     protected static ?int $sort = 2;
-    public static function canView(): bool
-    {
-       
-            if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
-                return true;
-            }
-            return false;
-        
-        
-    }
+    // public static function canView(): bool
+    // {
+
+    //         if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
+    //             return true;
+    //         }
+    //         return false;
+
+
+    // }
 
     public function table(Table $table): Table
     {

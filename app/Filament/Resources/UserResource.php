@@ -34,16 +34,14 @@ class UserResource extends Resource
                     ->email()
                     ->required(),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
+                // Forms\Components\TextInput::make('password')
+                //     ->password()
+                //    ->revealable()
+
+                //     ->required(),
+                Forms\Components\Select::make('role_id')
+                    ->relationship(Role::class, 'name')
                     ->required(),
-                // Forms\Components\Select::make('roles')
-                //     ->options(
-                //         Role::all()->pluck('name', 'id')
-                //     )
-                    // ->multiple()
-                    // ->relationship(User::class, 'roles')
-                    // ->required(),
             ]);
     }
 

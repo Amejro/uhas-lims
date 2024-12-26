@@ -20,9 +20,8 @@ return new class extends Migration {
             $table->integer('total_quantity')->nullable();
             $table->integer('reorder_level')->nullable();
             $table->timestamp('expiry_date');
-            $table->enum('status', ["available", ""]);
-            $table->boolean('has_variant');
-            $table->json('inventory_variant')->nullable();
+            $table->enum('status', ["available", "out_of_stock"]);
+            $table->json('item_variant')->nullable();
             $table->foreignId('storage_location_id')->constrained()->nullOnDelete();
             $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->timestamps();

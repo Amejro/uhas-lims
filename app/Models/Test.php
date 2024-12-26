@@ -44,9 +44,16 @@ class Test extends Model
         return $this->belongsToMany(Sample::class);
     }
 
+    // public function inventories(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Inventory::class);
+    // }
+
     public function inventories(): BelongsToMany
     {
-        return $this->belongsToMany(Inventory::class);
+        return $this->belongsToMany(Test::class)
+            ->using(Inventory::class);
+        // ->withPivot(['status', 'test_result']);
     }
 
     public function user(): BelongsTo
