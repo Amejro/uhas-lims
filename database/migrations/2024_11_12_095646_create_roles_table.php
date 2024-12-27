@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->string('name');
+            $table->string('code')->unique();
             $table->timestamps();
         });
     }

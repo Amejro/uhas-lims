@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RolesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'Roles';
+    protected static string $relationship = 'Role';
 
     public function form(Form $form): Form
     {
@@ -30,7 +30,7 @@ class RolesRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                ->searchable(),
+                    ->searchable(),
             ])
             ->filters([
                 //

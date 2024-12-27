@@ -30,7 +30,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('/')
             ->login()
-            // ->profile(isSimple: false)
+
+            ->profile(isSimple: false)
             ->passwordReset()
             ->colors([
                 'primary' => Color::Green,
@@ -82,7 +83,7 @@ class AdminPanelProvider extends PanelProvider
                             }
                             return false;
                         }
-                        
+
                     ),
             ])
             ->authMiddleware([

@@ -9,10 +9,15 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
+use Illuminate\Support\Str;
 use App\Filament\Resources\UserResource\RelationManagers\RolesRelationManager;
 
 class UserResource extends Resource
@@ -28,20 +33,27 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required(),
-                Forms\Components\TextInput::make('email')
+                TextInput::make('email')
                     ->email()
                     ->required(),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                // Forms\Components\TextInput::make('password')
-                //     ->password()
-                //    ->revealable()
+                DateTimePicker::make('email_verified_at'),
 
-                //     ->required(),
-                Forms\Components\Select::make('role_id')
-                    ->relationship(Role::class, 'name')
-                    ->required(),
+                Select::make('role_id')
+                    ->relationship('role', 'name')
+                    ->disabled(function ($record) {
+                        return $record;
+                    })
+                    ->required()
+                ,
+
+                Toggle::make('is_active')
+                    ->hidden(function ($record) {
+                        return !$record;
+                    }),
+
+
             ]);
     }
 
@@ -53,9 +65,16 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('role.name')
+                    ->searchable(),
+                // Tables\Columns\TextColumn::make('is_active')
+                //     ->searchable(),
+
+                Tables\Columns\IconColumn::make('is_active')
+                    ->boolean(),
+                // Tables\Columns\TextColumn::make('email_verified_at')
+                //     ->dateTime()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -81,7 +100,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RolesRelationManager::class,
+            // RolesRelationManager::class,
         ];
     }
 

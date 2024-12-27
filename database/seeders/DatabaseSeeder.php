@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\Test;
 use App\Models\User;
 use App\Models\DosageForm;
@@ -20,9 +21,9 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('admin'),
+            'name' => 'Super Admin',
+            'email' => 'superadmin@gmail.com',
+            'password' => Hash::make('superadmin'),
         ]);
 
 
@@ -47,6 +48,16 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Pharmacology and Toxicology (with sub acute and Bio activity test)', 'price' => 0, 'description' => '', 'user_id' => 1],
             ['name' => 'Pharmacology and Toxicology (with sub acute)', 'price' => 0, 'description' => '', 'user_id' => 1],
             ['name' => 'Pharmacology and Toxicology (with Bio activity test)', 'price' => 0, 'description' => '', 'user_id' => 1],
+        ]);
+
+        Role::insert([
+            ['name' => 'Super Admin', 'code' => 'super_admin', 'user_id' => 1],
+            ['name' => 'Admin', 'code' => 'admin', 'user_id' => 1],
+            ['name' => 'Technician', 'code' => 'technician', 'user_id' => 1],
+            ['name' => 'Accountant', 'code' => 'accountant', 'user_id' => 1],
+            ['name' => 'Receptionist', 'code' => 'receptionist', 'user_id' => 1],
+            ['name' => 'Store Keeper', 'code' => 'store_keeper', 'user_id' => 1],
+
         ]);
 
         Permission::insert([

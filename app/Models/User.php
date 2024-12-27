@@ -3,8 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Mail\UserCreated;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Filament\Notifications\Notification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -69,7 +71,7 @@ class User extends Authenticatable
         // return $this->roles()->where('permissions', 'LIKE', "%{$permission}%")->exists();
 
         $permissionArray = [];
-        foreach ($this->roles as $role) {
+        foreach ($this->role as $role) {
             foreach ($role->permissions as $singlepermission) {
                 $permissionArray[] = $singlepermission->name;
 
@@ -89,19 +91,24 @@ class User extends Authenticatable
 
         static::creating(function ($model) use ($defaultPassword) {
 
-            // $model->password = Hash::make($defaultPassword);
+            if (!empty($model->role_id)) {
+                $model->password = Hash::make($defaultPassword);
+            }
 
         });
 
         static::created(function ($model) use ($defaultPassword) {
 
-            // Notification::make()
-            //     ->title('Account Created Default password: ' . $defaultPassword)
-            //     ->success()
-            //     ->body('This default password is visible only once. Please change your password after login.')
 
-            //     ->persistent()
-            //     ->send();
+            Mail::to($model->email)->send(new UserCreated($defaultPassword, $user = $model));
+
+
+            Notification::make()
+                ->title('Account Created Successfully')
+                ->success()
+                ->body('An email has been sent to ' . $model->email . ' with the default password')
+                ->persistent()
+                ->send();
 
         });
 

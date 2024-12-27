@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
@@ -36,16 +37,17 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+
 
 Route::get('/{record}/pdf', [DownloadPdfController::class, 'download'])->name('samples.pdf.download');
 
 Route::get('/{payment}/receipt', [PaymentReceiptController::class, 'download'])->name('receipt.pdf.download');
 
 Route::get('/{record}/recommendations', [RecommendationController::class, 'print'])->name('recommendations');
+
+// Route::get('/mail', function () {
+//     // Mail::to('amejro19@gmail.com')->send(new App\Mail\UserCreated('password'));
+//     // return new App\Mail\UserCreated('password');
+// });
 
 // require __DIR__.'/auth.php';
