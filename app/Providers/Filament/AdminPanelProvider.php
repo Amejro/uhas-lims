@@ -60,7 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('50px')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->unsavedChangesAlerts()
-
+            ->databaseNotifications()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

@@ -1,8 +1,9 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Mail;
 use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DownloadPdfController;
@@ -48,6 +49,15 @@ Route::get('/{record}/recommendations', [RecommendationController::class, 'print
 // Route::get('/mail', function () {
 //     // Mail::to('amejro19@gmail.com')->send(new App\Mail\UserCreated('password'));
 //     // return new App\Mail\UserCreated('password');
+// });
+
+// Route::get('/technicians', function () {
+
+//     $recepients = User::with('role')->whereHas('role', function ($query) {
+//         $query->where('code', 'technician')->orWhere('code', 'admin');
+//     })->get();
+
+//     return $recepients;
 // });
 
 // require __DIR__.'/auth.php';
