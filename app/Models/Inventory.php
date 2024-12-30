@@ -85,6 +85,7 @@ class Inventory extends Model
 
             $model->user_id = auth()->id();
             $model->status = 'available';
+            $model->total_quantity = $model->total_quantity * 1000;
             $model->item_variant = null;
             $model->restock_quantity = null;
         });
@@ -102,7 +103,7 @@ class Inventory extends Model
                 'inventory_id' => $model->id,
                 'item_variant' => $variants,
                 'action' => $model->total_quantity > 0 ? 'addition' : 'deduction',
-                'total_quantity' => $totalQuantity,
+                'total_quantity' => $totalQuantity * 1000,
                 'user_id' => auth()->id(),
             ]);
 
@@ -117,12 +118,12 @@ class Inventory extends Model
                 'inventory_id' => $model->id,
                 'item_variant' => $model->item_variant,
                 'action' => $model->total_quantity > 0 ? 'addition' : 'deduction',
-                'total_quantity' => $model->restock_quantity,
+                'total_quantity' => $model->restock_quantity * 1000,
                 'user_id' => auth()->id(),
             ]);
 
             $model->user_id = auth()->id();
-            $model->total_quantity += $model->restock_quantity; // restock_quantity is the new quantity to be added to the total_quantity
+            $model->total_quantity += $model->restock_quantity * 1000; // restock_quantity is the new quantity to be added to the total_quantity
 
             $model->item_variant = null;
             $model->restock_quantity = null;

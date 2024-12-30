@@ -50,12 +50,8 @@ class InventoryResource extends Resource
                             Forms\Components\Select::make('unit')->live()
                                 ->options(
                                     [
-
-                                        'g' => 'g',
                                         'kg' => 'kg',
-                                        'mL' => 'mL',
                                         'L' => 'L',
-
                                     ]
                                 ),
                             Forms\Components\Textarea::make('description')->columnSpanFull()->readOnly(function ($record) {
@@ -65,6 +61,7 @@ class InventoryResource extends Resource
                                 return $record;
                             }),
                             Forms\Components\Select::make('storage_location_id')->relationship('storageLocation', 'id')->required(),
+
                             Repeater::make('item_variant')->label('Item Variant(s)')->schema([
                                 TextInput::make('variant')->live()->suffix(function (Get $get) {
                                     return $get('../../unit');
@@ -100,6 +97,13 @@ class InventoryResource extends Resource
                             ->label(function ($record) {
                                 return $record ? 'Available Quantity' : 'Total Quantity';
                             })
+
+                            // ->state(function ($record) {
+                            //     if ($record) {
+                            //         return $record-> total_quantity / 1000;
+                            //     }
+
+                            // })
                             ->suffix(function (Get $get) {
                                 return $get('unit');
 
@@ -151,6 +155,9 @@ class InventoryResource extends Resource
                 Tables\Columns\TextColumn::make('unit')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('total_quantity')
+                    ->state(function ($record) {
+                        return $record->total_quantity / 1000;
+                    })
                     ->suffix(function ($record) {
                         return $record->unit;
                     })
