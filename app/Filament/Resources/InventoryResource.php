@@ -44,7 +44,9 @@ class InventoryResource extends Resource
 
                         ->schema([
                             Forms\Components\TextInput::make('name')
-                                ->required(),
+                                ->required()->readOnly(function ($record) {
+                                    return $record;
+                                }),
                             Forms\Components\Select::make('unit')->live()
                                 ->options(
                                     [
@@ -55,116 +57,41 @@ class InventoryResource extends Resource
                                         'L' => 'L',
 
                                     ]
-                                )
-
-                            // ->afterStateUpdated(function (Component $component, Get $get) {
-
-
-
-
-                            //     $comp = $component->getContainer()->getFlatFields();
-
-                            //     foreach ($comp['item_variant']->getChildComponents() as $index => $item) {
-
-                            //         if ($index % 2 === 0) {
-
-                            //             $reflection = new ReflectionClass($item);
-
-                            //             $property = $reflection->getProperty('suffixLabel');
-
-                            //             $property->setAccessible(true);
-
-                            //             $property->setValue($item, $get('unit'));
-                            //         }
-
-
-
-                            //     }
-
-                            // })
-                            ,
-                            Forms\Components\Textarea::make('description')
-                                ->columnSpanFull(),
-
-
-
-                            Forms\Components\DatePicker::make('expiry_date')
-                                ->required(),
-
-                            Forms\Components\Select::make('storage_location_id')
-                                ->relationship('storageLocation', 'id')
-                                ->required(),
-
-
-                            Repeater::make('item_variant')
-                                ->label('Item Variant(s)')
-                                ->schema([
-                                    TextInput::make('variant')
-                                        ->live()
-                                        ->suffix(function (Get $get) {
-                                            return $get('../../unit');
-
-                                        })
-                                        ->afterStateUpdated(function (Set $set, Get $get) {
-                                            $set('sub_total', $get('quantity') * $get('variant'));
-
-                                        })
-                                        ->numeric()
-                                        ->required(),
-
-                                    TextInput::make('quantity')
-                                        ->numeric()
-                                        ->live()
-                                        ->afterStateUpdated(function (Set $set, Get $get) {
-                                            $set('sub_total', $get('quantity') * $get('variant'));
-
-                                        })
-                                        ->required(),
-
-                                    TextInput::make('sub_total')
-                                        ->numeric()
-                                        ->disabled()
-                                        ->suffix(function (Get $get) {
-                                            return $get('../../unit');
-                                        })
-
-                                        ->required(),
-                                ])
-
-
-
-                                ->columns(3)
-                                ->addAction(function (Get $get, Set $set, $record) {
-
+                                ),
+                            Forms\Components\Textarea::make('description')->columnSpanFull()->readOnly(function ($record) {
+                                return $record;
+                            }),
+                            Forms\Components\DatePicker::make('expiry_date')->required()->readOnly(function ($record) {
+                                return $record;
+                            }),
+                            Forms\Components\Select::make('storage_location_id')->relationship('storageLocation', 'id')->required(),
+                            Repeater::make('item_variant')->label('Item Variant(s)')->schema([
+                                TextInput::make('variant')->live()->suffix(function (Get $get) {
+                                    return $get('../../unit');
+                                })->afterStateUpdated(function (Set $set, Get $get) {
+                                    $set('sub_total', $get('quantity') * $get('variant'));
+                                })->numeric()->required(),
+                                TextInput::make('quantity')->numeric()->live()->afterStateUpdated(function (Set $set, Get $get) {
+                                    $set('sub_total', $get('quantity') * $get('variant'));
+                                })->required(),
+                                TextInput::make('sub_total')->numeric()->disabled()->suffix(function (Get $get) {
+                                    return $get('../../unit');
+                                })->required(),
+                            ])->columns(3)->addAction(function (Get $get, Set $set, $record) {
+                                if (!$record) {
+                                    $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                                    $set('total_quantity', $total);
+                                }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                                $set('restock_quantity', $total);
+                            })->deleteAction(function (Action $action) {
+                                $action->after(function (Get $get, Set $set, $record) {
                                     if (!$record) {
                                         $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-
                                         $set('total_quantity', $total);
-                                    }
-
-                                    $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-
+                                    }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
                                     $set('restock_quantity', $total);
-
-                                })
-
-                                ->deleteAction(function (Action $action) {
-                                    $action->after(function (Get $get, Set $set, $record) {
-                                        if (!$record) {
-                                            $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-
-                                            $set('total_quantity', $total);
-                                        }
-
-                                        $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-
-                                        $set('restock_quantity', $total);
-                                    });
-                                })
-
-
-
-                                ->columnSpanFull(),
+                                });
+                            })->columnSpanFull(),
 
                         ])->columns(2),
 
@@ -277,6 +204,7 @@ class InventoryResource extends Resource
             StockHistoryRelationManager::class,
         ];
     }
+
 
     public static function getPages(): array
     {
