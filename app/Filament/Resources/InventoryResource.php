@@ -67,13 +67,18 @@ class InventoryResource extends Resource
                                     return $get('../../unit');
                                 })->afterStateUpdated(function (Set $set, Get $get) {
                                     $set('sub_total', $get('quantity') * $get('variant'));
-                                })->numeric()->required(),
-                                TextInput::make('quantity')->numeric()->live()->afterStateUpdated(function (Set $set, Get $get) {
+                                })->numeric()
+                                    ->live(true)
+                                    ->required(),
+
+                                TextInput::make('quantity')->numeric()->live(true)->afterStateUpdated(function (Set $set, Get $get) {
                                     $set('sub_total', $get('quantity') * $get('variant'));
                                 })->required(),
+
                                 TextInput::make('sub_total')->numeric()->disabled()->suffix(function (Get $get) {
                                     return $get('../../unit');
                                 })->required(),
+
                             ])->columns(3)->addAction(function (Get $get, Set $set, $record) {
                                 if (!$record) {
                                     $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();

@@ -9,12 +9,14 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\TextInputColumn;
+
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class ProductVariantRelationManager extends RelationManager
 {
-    protected static string $relationship = 'productVariant';
+    protected static string $relationship = 'productVariants';
 
     public function isReadOnly(): bool
     {
@@ -70,6 +72,24 @@ class ProductVariantRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('size')
+                    ->label(function (RelationManager $livewire) {
+                        $unit = $livewire->getOwnerRecord()->unit;
+
+                        if ($unit == 'g') {
+                            return 'mass';
+                        }
+                        if ($unit == 'mL') {
+                            return 'volume ';
+                        }
+
+                    })
+                    ->suffix(function (RelationManager $livewire) {
+                        return $livewire->getOwnerRecord()->unit;
+                    }),
+                Tables\Columns\TextColumn::make('price')->money('GHS'),
+
+                Tables\Columns\TextColumn::make('quantity'),
             ])
             ->filters([
                 //

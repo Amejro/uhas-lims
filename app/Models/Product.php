@@ -28,7 +28,7 @@ class Product extends Model
         'user_id' => 'integer',
     ];
 
-    public function productVariant(): HasMany
+    public function productVariants(): HasMany
     {
         return $this->hasMany(ProductVariant::class);
     }
@@ -42,6 +42,7 @@ class Product extends Model
     {
         static::creating(function ($model) {
             $model->user_id = auth()->id();
+            $model->status = 'available';
             ;
         });
     }

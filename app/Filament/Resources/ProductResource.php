@@ -42,8 +42,10 @@ class ProductResource extends Resource
                         ]
                     )->required(),
                 Forms\Components\Select::make('storage_location_id')->relationship('storageLocation', 'id')->required(),
-                Forms\Components\Textarea::make('description')
-                ,
+                Forms\Components\Textarea::make('description'),
+        ,
+
+
 
                 Section::make('Ingredient')
                     ->description('provide the list of ingredients and the exact quantities required to produce one unit of your base size product')
@@ -84,22 +86,22 @@ class ProductResource extends Resource
                         ])->columns(2)
 
 
-                            ->addAction(function (Get $get, Set $set, $record) {
-                                if (!$record) {
-                                    $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-                                    $set('total_quantity', $total);
-                                }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-                                $set('restock_quantity', $total);
+                        // ->addAction(function (Get $get, Set $set, $record) {
+                        //     if (!$record) {
+                        //         $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                        //         $set('total_quantity', $total);
+                        //     }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                        //     $set('restock_quantity', $total);
 
-                            })->deleteAction(function (Action $action) {
-                                $action->after(function (Get $get, Set $set, $record) {
-                                    if (!$record) {
-                                        $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-                                        $set('total_quantity', $total);
-                                    }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-                                    $set('restock_quantity', $total);
-                                });
-                            })->columnSpanFull()
+                        // })->deleteAction(function (Action $action) {
+                        //     $action->after(function (Get $get, Set $set, $record) {
+                        //         if (!$record) {
+                        //             $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                        //             $set('total_quantity', $total);
+                        //         }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                        //         $set('restock_quantity', $total);
+                        //     });
+                        // })->columnSpanFull()
 
                         ,
                     ])
@@ -114,6 +116,7 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('unit')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
