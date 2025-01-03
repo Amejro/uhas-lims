@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('unit');
+            $table->integer('base_size')->default(0);
             $table->json('ingredient')->nullable();
             $table->text('description')->nullable();
             $table->foreignId('user_id')->constrained();

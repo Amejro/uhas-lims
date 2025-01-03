@@ -14,7 +14,7 @@ class Product extends Model
         'description',
         'unit',
         'ingredient',
-        'status',
+        'base_size',
         'storage_location_id',
         'user_id',
 
@@ -25,6 +25,7 @@ class Product extends Model
         'id' => 'integer',
         'ingredient' => 'array',
         'storage_location_id' => 'integer',
+
         'user_id' => 'integer',
     ];
 
@@ -32,6 +33,12 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+
+    public function productionBatch(): HasMany
+    {
+        return $this->hasMany(ProductionBatche::class);
+    }
+
 
     public function storageLocation(): BelongsTo
     {
@@ -42,7 +49,7 @@ class Product extends Model
     {
         static::creating(function ($model) {
             $model->user_id = auth()->id();
-            $model->status = 'available';
+            // $model->status = 'available';
             ;
         });
     }

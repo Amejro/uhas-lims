@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductVariant extends Model
@@ -29,11 +30,17 @@ class ProductVariant extends Model
         'quantity' => 'integer',
         'user_id' => 'integer',
         'product_id' => 'integer',
+
     ];
 
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function productionBatchLines(): HasMany
+    {
+        return $this->hasMany(ProductionBatcheLine::class);
     }
 
     protected static function booted()

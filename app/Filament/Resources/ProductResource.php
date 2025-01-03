@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Actions\Action;
@@ -40,12 +41,19 @@ class ProductResource extends Resource
                             'g' => 'g',
                             'mL' => 'mL',
                         ]
-                    )->required(),
+                    )
+                    ->live()
+                    ->required(),
+
+                Forms\Components\TextInput::make('base_size')
+                    ->suffix(function (Get $get) {
+                        return $get('unit');
+                    })
+                    ->live()
+                    ->numeric()
+                    ->required(),
                 Forms\Components\Select::make('storage_location_id')->relationship('storageLocation', 'id')->required(),
                 Forms\Components\Textarea::make('description'),
-        ,
-
-
 
                 Section::make('Ingredient')
                     ->description('provide the list of ingredients and the exact quantities required to produce one unit of your base size product')
@@ -74,7 +82,7 @@ class ProductResource extends Resource
                                             return 'g';
                                         }
 
-                                        return $get('ingredient');
+                                        // return $get('ingredient');
                                     }
                                 })
                                 ->reactive()
@@ -116,7 +124,11 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status'),
+                TextColumn::make('productVariants')->label('# Variants')->state(function ($record) {
+                    return $record->productVariants->count();
+                }),
+
+
                 Tables\Columns\TextColumn::make('unit')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')

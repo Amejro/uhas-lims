@@ -79,21 +79,26 @@ class InventoryResource extends Resource
                                     return $get('../../unit');
                                 })->required(),
 
-                            ])->columns(3)->addAction(function (Get $get, Set $set, $record) {
-                                if (!$record) {
-                                    $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-                                    $set('total_quantity', $total);
-                                }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
-                                $set('restock_quantity', $total);
-                            })->deleteAction(function (Action $action) {
-                                $action->after(function (Get $get, Set $set, $record) {
+                            ])->columns(3)
+                                ->addAction(function (Get $get, Set $set, $record) {
                                     if (!$record) {
                                         $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
                                         $set('total_quantity', $total);
-                                    }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                                    }
+
+                                    $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+
                                     $set('restock_quantity', $total);
-                                });
-                            })->columnSpanFull(),
+
+                                })->deleteAction(function (Action $action) {
+                                    $action->after(function (Get $get, Set $set, $record) {
+                                        if (!$record) {
+                                            $total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                                            $set('total_quantity', $total);
+                                        }$total = collect($get('item_variant'))->values()->pluck('sub_total')->sum();
+                                        $set('restock_quantity', $total);
+                                    });
+                                })->columnSpanFull(),
 
                         ])->columns(2),
 
@@ -141,11 +146,6 @@ class InventoryResource extends Resource
 
 
                 ])
-
-
-
-
-
             ])
             ->columns(1)
         ;

@@ -14,9 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('batch_code')->unique();
             $table->foreignId('product_id')->constrained()->nullOnDelete();
-            $table->integer('quantity');
-            $table->dateTime('production_date');
-            $table->text('notes')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->json('variants')->nullable();
+            $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }
