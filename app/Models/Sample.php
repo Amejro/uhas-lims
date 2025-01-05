@@ -61,7 +61,7 @@ class Sample extends Model
         'active_ingredient' => 'array',
         'indication' => 'array',
         'dosage' => 'array',
-        'test'=>'array',
+        'test' => 'array',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -117,7 +117,7 @@ class Sample extends Model
     {
         return $this->belongsToMany(Test::class)
             ->using(SampleTest::class)
-            ->withPivot(['status', 'test_result']);
+            ->withPivot(['inventory_updated', 'status', 'test_result']);
     }
 
     public function payments(): HasMany

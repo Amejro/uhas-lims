@@ -23,6 +23,7 @@ use Filament\Forms\Components\Toggle;
 
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
+use Illuminate\Support\Facades\Context;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ViewField;
 use Illuminate\Database\Eloquent\Builder;
@@ -90,11 +91,11 @@ class ProductionBatcheResource extends Resource
                                         ->afterStateUpdated(function (Get $get, Set $set) {
                                             // $set($get('total'), $get('quantity') * 2);
                             
+
+
                                             $productVariant = ProductVariant::find($get('product_variant_id'));
 
                                             $product = $productVariant->product;
-
-                                            $ingredientArray = [];
 
                                             $variantData = array_map(function ($ingredient) use ($productVariant, $product, $set, $get, &$ingredientArray) {
                                                 // $ing = Inventory::find($ingredient['ingredient']);
@@ -105,18 +106,17 @@ class ProductionBatcheResource extends Resource
                             
                                                 $totalSize = $factor * $productVariant?->size;
 
-                                                array_push($ingredientArray, [
-
-
+                                                Context::push('ingredientArray', [
                                                     'ingredient' => $ingredient['ingredient'],
                                                     'qty' => $totalSize * $get('quantity')
 
                                                 ]);
 
 
-                                                //         // $set('total', $get('../../' . $ingredient['ingredient']) + $factor * $productVariant?->size);
-                            
+
                                             }, $product->ingredient);
+
+
 
                                         })
 
@@ -132,6 +132,10 @@ class ProductionBatcheResource extends Resource
                             ->columns(3)
 
                             ->addAction(function (Get $get, Set $set, $record) use (&$ingredientArray) {
+
+
+
+
 
                                 $repeaterData = collect($get('productionBatchLines'));
 
@@ -219,8 +223,9 @@ class ProductionBatcheResource extends Resource
                             ->live()
                             ->afterStateUpdated(function (Get $get) {
 
-                                $ingredientArray = $get('ingredientArray'); // Retrieve from form state
-                                // dd($ingredientArray);
+                                // $Array = Context::all();
+                                // dd($Array);
+                    
                             })
                             ->reactive()
                             ->numeric(),

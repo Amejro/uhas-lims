@@ -42,9 +42,9 @@ class UserResource extends Resource
 
                 Select::make('role_id')
                     ->relationship('role', 'name')
-                    ->disabled(function ($record) {
-                        return $record;
-                    })
+                    // ->disabled(function ($record) {
+                    //     return $record;
+                    // })
                     ->required()
                 ,
 
@@ -67,8 +67,6 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('role.name')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('is_active')
-                //     ->searchable(),
 
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),

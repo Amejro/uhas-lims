@@ -21,6 +21,7 @@ class Test extends Model
         'name',
         'description',
         'price',
+        'reagent_kit',
         'user_id',
     ];
 
@@ -32,6 +33,7 @@ class Test extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
+        'reagent_kit' => 'array',
     ];
 
     public function templates(): HasMany

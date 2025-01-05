@@ -66,6 +66,7 @@ class User extends Authenticatable
     {
         return $this->role()->where('name', $role)->exists();
     }
+
     public function hasPermission(string $permission): bool
     {
         // return $this->roles()->where('permissions', 'LIKE', "%{$permission}%")->exists();
@@ -83,7 +84,25 @@ class User extends Authenticatable
     }
 
 
+    public function is_active()
+    {
+        return $this->is_active;
+    }
 
+    public function reset_default_password()
+    {
+        return $this->reset_default_password;
+    }
+
+    public function is_super_admin()
+    {
+        return $this->role()->where('code', 'super_admin')->exists();
+    }
+
+    public function is_admin()
+    {
+        return $this->role()->where('code', 'admin')->exists();
+    }
 
     public static function booted()
     {
