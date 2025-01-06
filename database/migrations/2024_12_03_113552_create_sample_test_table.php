@@ -15,7 +15,8 @@ return new class extends Migration {
         Schema::create('sample_test', function (Blueprint $table) {
             $table->foreignId('sample_id');
             $table->foreignId('test_id');
-            $table->enum('status', ["pending", "completed"])->nullable();
+            $table->boolean('inventory_updated')->default(false);
+            $table->enum('status', ["pending", "completed", "approved"])->nullable();
             $table->json('test_result')->nullable();
             $table->timestamps();
         });

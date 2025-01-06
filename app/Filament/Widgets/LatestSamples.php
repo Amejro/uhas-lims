@@ -22,8 +22,8 @@ class LatestSamples extends BaseWidget
             return false;
         }
         return true;
-        
-        
+
+
     }
 
     protected static ?int $sort = 3;

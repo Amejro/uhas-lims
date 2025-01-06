@@ -23,8 +23,8 @@ class PaymentChart extends ChartWidget
             return true;
         }
         return false;
-        
-        
+
+
     }
 
 

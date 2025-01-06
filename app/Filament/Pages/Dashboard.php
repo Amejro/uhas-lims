@@ -13,16 +13,16 @@ class Dashboard extends BaseDashboard
 {
     use BaseDashboard\Concerns\HasFiltersForm;
 
-    public static function canView(): bool
-    {
-       
-        if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
-            return true;
-        }
-        return false;
-        
-        
-    }
+    // public static function canView(): bool
+    // {
+
+    //     if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
+    //         return true;
+    //     }
+    //     return false;
+
+
+    // }
 
     public function filtersForm(Form $form): Form
     {

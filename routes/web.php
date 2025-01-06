@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Response;
 use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DownloadPdfController;
@@ -32,20 +34,34 @@ Route::get('/pdf', function () {
 
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::get('/oops', function () {
+    return view('pages.inactive-account');
 });
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+
 
 Route::get('/{record}/pdf', [DownloadPdfController::class, 'download'])->name('samples.pdf.download');
 
 Route::get('/{payment}/receipt', [PaymentReceiptController::class, 'download'])->name('receipt.pdf.download');
 
 Route::get('/{record}/recommendations', [RecommendationController::class, 'print'])->name('recommendations');
+
+// Route::get('/mail', function () {
+//     // Mail::to('amejro19@gmail.com')->send(new App\Mail\UserCreated('password'));
+//     // return new App\Mail\UserCreated('password');
+// });
+
+// Route::get('/technicians', function () {
+
+//     $recepients = User::with('role')->whereHas('role', function ($query) {
+//         $query->where('code', 'technician')->orWhere('code', 'admin');
+//     })->get();
+
+//     return $recepients;
+// });
 
 // require __DIR__.'/auth.php';

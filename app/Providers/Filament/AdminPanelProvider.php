@@ -8,6 +8,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use App\Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
+use App\Http\Middleware\IsUserActive;
 use Filament\Http\Middleware\Authenticate;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 use Illuminate\Session\Middleware\StartSession;
@@ -30,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('/')
             ->login()
-            // ->profile(isSimple: false)
+            ->profile(isSimple: false)
             ->passwordReset()
             ->colors([
                 'primary' => Color::Green,
@@ -59,7 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('50px')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->unsavedChangesAlerts()
-
+            ->databaseNotifications()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -70,6 +71,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                IsUserActive::class,
             ])
 
             ->plugins([
@@ -82,7 +84,7 @@ class AdminPanelProvider extends PanelProvider
                             }
                             return false;
                         }
-                        
+
                     ),
             ])
             ->authMiddleware([

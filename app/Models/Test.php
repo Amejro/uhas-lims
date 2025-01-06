@@ -21,6 +21,7 @@ class Test extends Model
         'name',
         'description',
         'price',
+        'reagent_kit',
         'user_id',
     ];
 
@@ -32,6 +33,7 @@ class Test extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
+        'reagent_kit' => 'array',
     ];
 
     public function templates(): HasMany
@@ -44,9 +46,16 @@ class Test extends Model
         return $this->belongsToMany(Sample::class);
     }
 
+    // public function inventories(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Inventory::class);
+    // }
+
     public function inventories(): BelongsToMany
     {
-        return $this->belongsToMany(Inventory::class);
+        return $this->belongsToMany(Test::class)
+            ->using(Inventory::class);
+        // ->withPivot(['status', 'test_result']);
     }
 
     public function user(): BelongsTo

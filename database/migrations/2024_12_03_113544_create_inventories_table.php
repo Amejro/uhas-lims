@@ -18,12 +18,22 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->string('unit')->nullable();
             $table->integer('total_quantity')->nullable();
+            $table->integer('restock_quantity')->nullable();
             $table->integer('reorder_level')->nullable();
             $table->timestamp('expiry_date');
-            $table->enum('status', ["available", ""]);
-            $table->boolean('has_variant');
-            $table->json('inventory_variant')->nullable();
+            $table->enum('status', ["available", "out_of_stock"]);
+            $table->json('item_variant')->nullable();
             $table->foreignId('storage_location_id')->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->constrained()->nullOnDelete();
+            $table->timestamps();
+        });
+
+        Schema::create('stock_histories', function (Blueprint $table) {
+            $table->id();
+            $table->integer('total_quantity');
+            $table->foreignId('inventory_id')->constrained()->nullable()->nullOnDelete();
+            $table->json('item_variant')->nullable();
+            $table->enum('action', ["addition", "deduction"]);
             $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->timestamps();
         });
@@ -36,6 +46,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        Schema::dropIfExists('stock_histories');
+
         Schema::dropIfExists('inventories');
     }
 };

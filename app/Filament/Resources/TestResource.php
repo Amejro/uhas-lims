@@ -5,9 +5,14 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\Test;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
+use App\Models\Inventory;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,14 +34,54 @@ class TestResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required(),
-                Textarea::make('description')
-                    ->columnSpanFull(),
+                Textarea::make('description'),
                 TextInput::make('price')
                     ->required()
                     ->numeric()
                     ->prefix('GH₵'),
 
-            ]);
+                Section::make('reagent_kit')
+                    ->description('Provide the list of reagents and their quantities required for this test')
+                    ->schema([
+                        Repeater::make('reagent_kit')->label('')->schema([
+
+                            Select::make('reagent_kit')
+                                ->options(function () {
+                                    return Inventory::all()->pluck('name', 'id');
+                                })
+                                ->live()
+
+                                ->required(),
+
+                            TextInput::make('quantity')->numeric()->live()
+                                ->suffix(function (Get $get) {
+                                    $ingredient = Inventory::find((int) $get('reagent_kit'));
+
+                                    if ($ingredient) {
+                                        if ($ingredient->unit == 'L') {
+                                            return 'mL';
+                                        }
+
+                                        if ($ingredient->unit == 'Kg') {
+                                            return 'g';
+                                        }
+
+                                        // return $get('ingredient');
+                                    }
+                                })
+                                ->reactive()
+                                ->disabled(function (Get $get) {
+                                    return !$get('reagent_kit');
+                                })
+                                ->required(),
+
+                        ])->columns(2)
+                        ,
+                    ])
+
+            ])
+            ->columns(2)
+        ;
     }
 
     public static function table(Table $table): Table
