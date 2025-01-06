@@ -53,9 +53,8 @@ class CreateSample extends CreateRecord
                         ->placeholder('Enter indications'),
 
                     TagsInput::make('active_ingredient')
-                        ->placeholder('Enter ingredient')
-                        ->splitKeys(['Tab', ' '])
-                    ,
+                        ->placeholder('Enter ingredient'),
+                        
                     TagsInput::make('dosage')->label('Dosing')
                         ->placeholder('Enter dosing')
                     ,

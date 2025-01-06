@@ -37,8 +37,10 @@ class UserResource extends Resource
                     ->required(),
                 TextInput::make('email')
                     ->email()
+                    ->unique(table: User::class)
+                    ->endsWith(['@uhas.edu.gh'])
                     ->required(),
-                DateTimePicker::make('email_verified_at'),
+                // DateTimePicker::make('email_verified_at'),
 
                 Select::make('role_id')
                     ->relationship('role', 'name')

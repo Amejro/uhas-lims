@@ -69,16 +69,16 @@ class User extends Authenticatable
 
     public function hasPermission(string $permission): bool
     {
-        // return $this->roles()->where('permissions', 'LIKE', "%{$permission}%")->exists();
+        // return $this->role()->where('permissions', 'LIKE', "%{$permission}%")->exists();
 
         $permissionArray = [];
-        foreach ($this->role as $role) {
-            foreach ($role->permissions as $singlepermission) {
+        // foreach ($this->role as $role) {
+            foreach ($this->role->permissions as $singlepermission) {
                 $permissionArray[] = $singlepermission->name;
 
             }
 
-        }
+        // }
         return collect($permissionArray)->unique()->contains($permission);
 
     }
@@ -119,7 +119,7 @@ class User extends Authenticatable
         static::created(function ($model) use ($defaultPassword) {
 
 
-            Mail::to($model->email)->send(new UserCreated($defaultPassword, $user = $model));
+          $myMail =  Mail::to($model->email)->send(new UserCreated($defaultPassword, $user = $model));
 
 
             Notification::make()

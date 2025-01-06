@@ -15,10 +15,10 @@ return new class extends Migration {
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->json('content');
-            $table->foreignId('test_id')->constrained()->nullOnDelete();
-            $table->foreignId('dosage_form_id');
-            $table->foreignId('user_id')->constrained()->nullOnDelete();
+            $table->json('content')->nullable();
+            $table->foreignId('test_id')->nullable();
+            $table->foreignId('dosage_form_id')->nullable();
+            $table->foreignId('user_id')->nullable();
             $table->timestamps();
         });
 
