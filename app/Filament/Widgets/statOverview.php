@@ -22,16 +22,15 @@ class statOverview extends BaseWidget
     // protected static ?int $sort = 1;
     protected static ?int $sort = 0;
 
-    //     public static function canView(): bool
-// {
+    public static function canView(): bool
+    {
 
-    //     if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
-//         return true;
-//     }
-//     return false;
+        if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
+            return true;
+        }
+        return false;
 
-
-    // }
+    }
 
 
     protected function getStats(): array
