@@ -63,6 +63,9 @@ class SampleResource extends Resource
                     ->schema([
                         TextInput::make('name')
                             ->label('Product name')
+                            ->hidden(function () {
+                                return auth()->user()->is_technician();
+                            })
                             ->required(),
                         Select::make('dosage_form_id')
                             ->relationship('dosageForm', 'name')
@@ -130,6 +133,9 @@ class SampleResource extends Resource
                         Select::make('producer_id')
                             ->relationship('producer', 'name')
                             ->createOptionForm(Producer::getForm())
+                            ->hidden(function () {
+                                return auth()->user()->is_technician();
+                            })
                             ->required(),
                         Radio::make('status')
                             ->hidden(function ($record) {
@@ -155,8 +161,14 @@ class SampleResource extends Resource
                 Tables\Columns\TextColumn::make('serial_code')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                ->hidden(function () {
+                    return auth()->user()->is_technician();
+                })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('producer.name')
+                ->hidden(function () {
+                    return auth()->user()->is_technician();
+                })
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('dosageForm.name')
@@ -218,11 +230,14 @@ class SampleResource extends Resource
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    // Tables\Actions\EditAction::make()
+                    Tables\Actions\EditAction::make(),
 
                     Action::make('Print report')
                         ->icon('heroicon-o-document-arrow-down')
                         ->url(fn(Sample $record) => route('samples.pdf.download', $record))
+                        ->hidden(function () {
+                            return !auth()->user()->is_admin();
+                        })
                         ->openUrlInNewTab(),
 
                     Action::make('Recommendations')
@@ -231,13 +246,18 @@ class SampleResource extends Resource
                     // ->openUrlInNewTab()
 
                 ]),
-                ActivityLogTimelineTableAction::make('Activities'),
+                ActivityLogTimelineTableAction::make('Activities')->hidden(function () {
+                    return !auth()->user()->is_admin();
+                }),
 
-            ])->recordUrl(function (Model $record) {
+            ])
+            // ->recordUrl(function (Model $record) {
 
-                return Pages\EditSample::getUrl([$record->id]);
+            //     return Pages\EditSample::getUrl([$record->id])->hidden(function () {
+            //         return !auth()->user()->is_admin();
+            //     });
 
-            })
+            // })
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

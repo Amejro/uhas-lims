@@ -62,10 +62,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
     public function hasRole(string $role): bool
     {
-        return $this->role()->where('name', $role)->exists();
+        return $this->role()->where('code', $role)->exists();
     }
+
+
 
     public function hasPermission(string $permission): bool
     {
@@ -99,9 +102,16 @@ class User extends Authenticatable
         return $this->role()->where('code', 'super_admin')->exists();
     }
 
+
+
     public function is_admin()
     {
-        return $this->role()->where('code', 'admin')->exists();
+        return $this->role()->where('code', 'admin')->exists() || $this->role()->where('code', 'super_admin')->exists();
+    }
+
+    public function is_technician()
+    {
+        return $this->role()->where('code', 'technician')->exists();
     }
 
     public static function booted()

@@ -18,7 +18,7 @@ class LatestSamples extends BaseWidget
 
     public static function canView(): bool
     {
-        if (auth()->user()->hasRole('Accountant')) {
+        if (auth()->user()->hasRole('accountant')) {
             return false;
         }
         return true;
@@ -39,9 +39,15 @@ class LatestSamples extends BaseWidget
                 TextColumn::make('serial_code')
                     ->searchable(),
                 TextColumn::make('name')
+                ->hidden(function () {
+                    return auth()->user()->is_technician();
+                })
                     ->searchable(),
                 TextColumn::make('producer.name')
                     ->numeric()
+                    ->hidden(function () {
+                        return auth()->user()->is_technician();
+                    })
                     ->sortable(),
                 TextColumn::make('dosageForm.name')
                     ->numeric()

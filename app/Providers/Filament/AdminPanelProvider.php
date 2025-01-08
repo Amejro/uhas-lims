@@ -79,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationGroup('Settings & Logs')
                     ->authorize(
                         function () {
-                            if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator')) {
+                            if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin')) {
                                 return true;
                             }
                             return false;

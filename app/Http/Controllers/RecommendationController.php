@@ -18,6 +18,7 @@ class RecommendationController extends Controller
 
         $pdf = Browsershot::html($recommendationsTemplate)
             ->format('A4')
+            ->setIncludePath('$PATH:/usr/local/bin')
             ->margins(20, 20, 20, 20)
             ->showBrowserHeaderAndFooter()
             ->headerHtml($header)

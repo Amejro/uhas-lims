@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "awcodes/filament-tiptap-editor": "^3.0",
+        "barryvdh/laravel-dompdf": "^3.0",
         "codeat3/blade-eos-icons": "^1.14",
         "codeat3/blade-fontisto-icons": "^1.4",
         "filament/filament": "^3.2",

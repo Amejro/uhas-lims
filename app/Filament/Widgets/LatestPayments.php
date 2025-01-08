@@ -17,7 +17,7 @@ class LatestPayments extends BaseWidget
     public static function canView(): bool
     {
 
-        if (auth()->user()->hasRole('Supper Administrator') || auth()->user()->hasRole('Administrator') || auth()->user()->hasRole('Accountant')) {
+        if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin') || auth()->user()->hasRole('accountant')) {
             return true;
         }
         return false;
