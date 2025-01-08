@@ -10,7 +10,6 @@
   }
 </style>
 
-<div class='header'>
-PMB 31, Ho Volta Region, Ghana | Phone: +233(0)36-219-5662 | Email: itam@uhas.edu.gh | Web: www.itam.uhas.edu.gh
+<div class='footer'>
+  PMB 31, Ho Volta Region, Ghana | Phone: +233(0)36-219-5662 | Email: itam@uhas.edu.gh | Web: www.itam.uhas.edu.gh
 </div>
-

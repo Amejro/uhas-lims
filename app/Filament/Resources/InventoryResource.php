@@ -108,6 +108,7 @@ class InventoryResource extends Resource
                                 return $record ? 'Available Quantity' : 'Total Quantity';
                             })
 
+
                             // ->state(function ($record) {
                             //     if ($record) {
                             //         return $record-> total_quantity / 1000;

@@ -3,13 +3,16 @@
 namespace App\Filament\Resources\SampleResource\RelationManagers;
 
 use Filament\Forms;
+use App\Models\Test;
 use Filament\Tables;
 use App\Models\Sample;
 use Livewire\Component;
 use App\Models\Template;
 use Filament\Forms\Form;
+use App\Models\Inventory;
 use App\Models\SampleTest;
 use Filament\Tables\Table;
+use App\Jobs\UpdateInventoryJob;
 use Filament\Forms\Components\Section;
 use FilamentTiptapEditor\TiptapEditor;
 use Filament\Tables\Actions\EditAction;
@@ -81,14 +84,25 @@ class TestsRelationManager extends RelationManager
             ])
             ->actions([
                 EditAction::make()->slideOver()
-
                     ->closeModalByClickingAway(false)
                     ->closeModalByEscaping(false)
                     ->modalAutofocus(false)
                     ->label('test')->icon('heroicon-o-eye-dropper')
                     ->beforeFormFilled(function (EditAction $action, $record) {
 
+
                         if (!$record->test_result) {
+
+                            UpdateInventoryJob::dispatch($record->test_id);
+                            // update inventory
+                            // $test = Test::find($record->test_id);
+                            // collect($test->reagent_kit)->map(function ($kit) {
+                            //     $inventory = Inventory::find($kit['reagent_kit']);
+                            //     $inventory->total_quantity -= (int) $kit['quantity'];
+                            //     $inventory->save();
+                            // });
+            
+                            return;
 
                             $sample = Sample::find($record->sample_id);
 
@@ -108,11 +122,13 @@ class TestsRelationManager extends RelationManager
                                 $action->cancel();
                             }
 
-                            SampleTest::where('test_id', $record->test_id)->where('sample_id', $record->sample_id)->update(['test_result' => $template->content]);
+                            SampleTest::where('test_id', $record->test_id)->where('sample_id', $record->sample_id)->update(['test_result' => $template->content, 'inventory_updated' => true]);
+
+
 
                             Notification::make()
                                 ->title('Setup completed')
-                                ->body('The default template has been set up you can now continue with the test')
+                                ->body('The default template has been set up, you can now continue with the test')
                                 ->send();
                             $action->cancel();
 
@@ -121,7 +137,9 @@ class TestsRelationManager extends RelationManager
 
 
                     })
-
+                // ->hidden(function (RelationManager $livewire) {
+                //     return !$livewire->getOwnerRecord()->is_Payment_Made();
+                // })
                 ,
 
 

@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('unit')->nullable();
             $table->integer('total_quantity')->nullable();
             $table->integer('restock_quantity')->nullable();
-            $table->integer('reorder_level')->nullable();
+            $table->integer('reorder_level')->default(0);
             $table->timestamp('expiry_date');
             $table->enum('status', ["available", "out_of_stock"]);
             $table->json('item_variant')->nullable();
