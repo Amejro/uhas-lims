@@ -11,6 +11,11 @@ use App\Models\DosageForm;
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\RolesTableSeeder;
+use Database\Seeders\UsersTableSeeder;
+use Database\Seeders\RoleUserTableSeeder;
+use Database\Seeders\PermissionsTableSeeder;
+use Database\Seeders\PermissionRoleTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,10 +26,18 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@uhas.edu.gh',
-            'password' => Hash::make('superadmin'),
+        // User::factory()->create([
+        //     'name' => 'Super Admin',
+        //     'email' => 'superadmin@uhas.edu.gh',
+        //     'password' => Hash::make('superadmin'),
+        // ]);
+
+        $this->call([
+            UsersTableSeeder::class,
+            RolesTableSeeder::class,
+            PermissionsTableSeeder::class,
+            PermissionRoleTableSeeder::class,
+            RoleUserTableSeeder::class,
         ]);
 
 
@@ -51,15 +64,15 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Pharmacology and Toxicology (with Bio activity test)', 'price' => 0, 'description' => '', 'user_id' => 1],
         ]);
 
-        Role::insert([
-            ['name' => 'Super Admin', 'code' => 'super_admin', 'user_id' => 1],
-            ['name' => 'Admin', 'code' => 'admin', 'user_id' => 1],
-            ['name' => 'Technician', 'code' => 'technician', 'user_id' => 1],
-            ['name' => 'Accountant', 'code' => 'accountant', 'user_id' => 1],
-            ['name' => 'Receptionist', 'code' => 'receptionist', 'user_id' => 1],
-            ['name' => 'Store Keeper', 'code' => 'store_keeper', 'user_id' => 1],
+        // Role::insert([
+        //     ['name' => 'Super Admin', 'code' => 'super_admin', 'user_id' => 1],
+        //     ['name' => 'Admin', 'code' => 'admin', 'user_id' => 1],
+        //     ['name' => 'Technician', 'code' => 'technician', 'user_id' => 1],
+        //     ['name' => 'Accountant', 'code' => 'accountant', 'user_id' => 1],
+        //     ['name' => 'Receptionist', 'code' => 'receptionist', 'user_id' => 1],
+        //     ['name' => 'Store Keeper', 'code' => 'store_keeper', 'user_id' => 1],
 
-        ]);
+        // ]);
 
         Template::insert([
             ['name' => 'PHARMACOGNOSTIC ANALYSIS TEMPLATE (CAPSULE)',  'content' => '{"type":"doc","content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"},{"type":"underline"}],"text":" PHARMACOGNOSTIC ANALYSIS"}]},{"type":"table","attrs":{"class":null,"style":null},"content":[{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableHeader","attrs":{"class":null,"style":null,"colspan":2,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"center"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Organoleptic characteristics"}]}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Form"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","text":"Solid"}]}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Color"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Odor"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Tast"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]}]},{"type":"table","attrs":{"class":null,"style":null},"content":[{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableHeader","attrs":{"class":null,"style":null,"colspan":2,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"center"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Phytochemical properties"}]}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Tennin"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Glycosides"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Saponins"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Alkaloids"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Flavonoids"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Triterpenoids"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Sterols"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]}]},{"type":"table","attrs":{"class":null,"style":null},"content":[{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableHeader","attrs":{"class":null,"style":null,"colspan":2,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"center"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Physicochemical properties"}]}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Average  weight of capsules"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Average  weight of content"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Moisture content"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]},{"type":"tableRow","attrs":{"class":null,"style":null},"content":[{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"pH"}]}]},{"type":"tableCell","attrs":{"class":null,"style":null,"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"}}]}]}]},{"type":"paragraph","attrs":{"class":null,"style":null,"textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Spectroscopic profile"}]},{"type":"paragraph","attrs":{"class":null,"style":"line-height: 100%; orphans: 2; widows: 2; margin-top: 0.17in; margin-bottom: 0.17in","textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Fourier-Transform Infrared Fingerprint"}]},{"type":"paragraph","attrs":{"class":null,"style":"line-height: 100%; orphans: 2; widows: 2; margin-top: 0.17in; margin-bottom: 0.17in","textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Sample preparation: "},{"type":"text","text":"About 20 mL of "},{"type":"text","marks":[{"type":"bold"}],"text":"[ PRODUCT NAME ] "},{"type":"text","text":"was evaporated to dryness."}]},{"type":"paragraph","attrs":{"class":null,"style":"line-height: 100%; orphans: 2; widows: 2; margin-top: 0.17in; margin-bottom: 0.17in","textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Instrumentation: "},{"type":"text","text":"A small amount of the extract was placed on the sample area of the Bruker Fourier- transform infrared (FT-IR) spectrometer and scanned between 4000\u2013400 cm"},{"type":"text","marks":[{"type":"superscript"}],"text":"-1"},{"type":"text","text":" with a resolving power of 4 cm"},{"type":"text","marks":[{"type":"superscript"}],"text":"-1"},{"type":"text","text":" and a cumulative scanning limitation of 24 times."}]},{"type":"paragraph","attrs":{"class":null,"style":"line-height: 100%; orphans: 2; widows: 2; margin-top: 0.17in; margin-bottom: 0.17in","textAlign":"start"}},{"type":"paragraph","attrs":{"class":null,"style":"line-height: 100%; orphans: 2; widows: 2; margin-top: 0.17in; margin-bottom: 0.17in","textAlign":"start"},"content":[{"type":"text","text":"[ INSERT IMAGE HERE ]"}]},{"type":"paragraph","attrs":{"class":null,"style":"line-height: 100%; orphans: 2; widows: 2; margin-top: 0.17in; margin-bottom: 0.17in","textAlign":"start"},"content":[{"type":"text","text":"Characteristic physicochemical properties of "},{"type":"text","marks":[{"type":"bold"}],"text":"[ PRODUCT NAME ] "},{"type":"text","text":"have been established for quality control purposes."}]},{"type":"paragraph","attrs":{"class":null,"style":"line-height: 100%; orphans: 2; widows: 2; margin-top: 0.17in; margin-bottom: 0.17in","textAlign":"start"},"content":[{"type":"text","marks":[{"type":"bold"}],"text":"Results: "},{"type":"text","text":"Principal peaks appeared at wavenumbers "},{"type":"text","marks":[{"type":"bold"}],"text":"[................]"},{"type":"text","text":" cm"},{"type":"text","marks":[{"type":"superscript"}],"text":"-1"}]},{"type":"paragraph","attrs":{"class":null,"style":"line-height: 100%; orphans: 2; widows: 2; margin-top: 0.17in; margin-bottom: 0.17in","textAlign":"start"}}]}','test_id' => '', 'dosage_form_id' => '', 'user_id' => 1],
@@ -71,86 +84,86 @@ class DatabaseSeeder extends Seeder
             
         ]);
 
-        Permission::insert([
-            // DosageForm
-            ['name' => 'DosageForm_access','user_id' => 1],
-            ['name' => 'DosageForm_show','user_id' => 1],
-            ['name' => 'DosageForm_create','user_id' => 1],
-            ['name' => 'DosageForm_edit','user_id' => 1],
-            ['name' => 'DosageForm_delete','user_id' => 1],
-            // Inventory
-            ['name' => 'Inventory_access','user_id' => 1],
-            ['name' => 'Inventory_show','user_id' => 1],
-            ['name' => 'Inventory_create','user_id' => 1],
-            ['name' => 'Inventory_edit','user_id' => 1],
-            ['name' => 'Inventory_delete','user_id' => 1],
-            //    // Permission
-            ['name' => 'Permission_access','user_id' => 1],
-            ['name' => 'Permission_show','user_id' => 1],
-            ['name' => 'Permission_create','user_id' => 1],
-            ['name' => 'Permission_edit','user_id' => 1],
-            ['name' => 'Permission_delete','user_id' => 1],
-            // Role
-            ['name' => 'Role_access','user_id' => 1],
-            ['name' => 'Role_show','user_id' => 1],
-            ['name' => 'Role_create','user_id' => 1],
-            ['name' => 'Role_edit','user_id' => 1],
-            ['name' => 'Role_delete','user_id' => 1],
-            // User
-            ['name' => 'User_access','user_id' => 1],
-            ['name' => 'User_show','user_id' => 1],
-            ['name' => 'User_create','user_id' => 1],
-            ['name' => 'User_edit','user_id' => 1],
-            ['name' => 'User_delete','user_id' => 1],
-            //Sample
-            ['name' => 'Sample_access','user_id' => 1],
-            ['name' => 'Sample_show','user_id' => 1],
-            ['name' => 'Sample_create','user_id' => 1],
-            ['name' => 'Sample_edit','user_id' => 1],
-            ['name' => 'Sample_delete','user_id' => 1],
-            // SampleTest
-            ['name' => 'SampleTest_access','user_id' => 1],
-            ['name' => 'SampleTest_show','user_id' => 1],
-            ['name' => 'SampleTest_create','user_id' => 1],
-            ['name' => 'SampleTest_edit','user_id' => 1],
-            ['name' => 'SampleTest_delete','user_id' => 1],
-            // Payment
-            ['name' => 'Payment_access','user_id' => 1],
-            ['name' => 'Payment_show','user_id' => 1],
-            ['name' => 'Payment_create','user_id' => 1],
-            ['name' => 'Payment_edit','user_id' => 1],
-            ['name' => 'Payment_delete','user_id' => 1],
-            // PaymentRecord
-            ['name' => 'PaymentRecord_access','user_id' => 1],
-            ['name' => 'PaymentRecord_show','user_id' => 1],
-            ['name' => 'PaymentRecord_create','user_id' => 1],
-            ['name' => 'PaymentRecord_edit','user_id' => 1],
-            ['name' => 'PaymentRecord_delete','user_id' => 1],
-            // Producer
-            ['name' => 'Producer_access','user_id' => 1],
-            ['name' => 'Producer_show','user_id' => 1],
-            ['name' => 'Producer_create','user_id' => 1],
-            ['name' => 'Producer_edit','user_id' => 1],
-            ['name' => 'Producer_delete','user_id' => 1],
-            // StorageLocation
-            ['name' => 'StorageLocation_access','user_id' => 1],
-            ['name' => 'StorageLocation_show','user_id' => 1],
-            ['name' => 'StorageLocation_create','user_id' => 1],
-            ['name' => 'StorageLocation_edit','user_id' => 1],
-            ['name' => 'StorageLocation_delete','user_id' => 1],
-            // Test
-            ['name' => 'Test_access','user_id' => 1],
-            ['name' => 'Test_show','user_id' => 1],
-            ['name' => 'Test_create','user_id' => 1],
-            ['name' => 'Test_edit','user_id' => 1],
-            ['name' => 'Test_delete','user_id' => 1],
-            // Template
-            ['name' => 'Template_access','user_id' => 1],
-            ['name' => 'Template_show','user_id' => 1],
-            ['name' => 'Template_create','user_id' => 1],
-            ['name' => 'Template_edit','user_id' => 1],
-            ['name' => 'Template_delete','user_id' => 1],
-        ]);
+        // Permission::insert([
+        //     // DosageForm
+        //     ['name' => 'DosageForm_access','user_id' => 1],
+        //     ['name' => 'DosageForm_show','user_id' => 1],
+        //     ['name' => 'DosageForm_create','user_id' => 1],
+        //     ['name' => 'DosageForm_edit','user_id' => 1],
+        //     ['name' => 'DosageForm_delete','user_id' => 1],
+        //     // Inventory
+        //     ['name' => 'Inventory_access','user_id' => 1],
+        //     ['name' => 'Inventory_show','user_id' => 1],
+        //     ['name' => 'Inventory_create','user_id' => 1],
+        //     ['name' => 'Inventory_edit','user_id' => 1],
+        //     ['name' => 'Inventory_delete','user_id' => 1],
+        //     //    // Permission
+        //     ['name' => 'Permission_access','user_id' => 1],
+        //     ['name' => 'Permission_show','user_id' => 1],
+        //     ['name' => 'Permission_create','user_id' => 1],
+        //     ['name' => 'Permission_edit','user_id' => 1],
+        //     ['name' => 'Permission_delete','user_id' => 1],
+        //     // Role
+        //     ['name' => 'Role_access','user_id' => 1],
+        //     ['name' => 'Role_show','user_id' => 1],
+        //     ['name' => 'Role_create','user_id' => 1],
+        //     ['name' => 'Role_edit','user_id' => 1],
+        //     ['name' => 'Role_delete','user_id' => 1],
+        //     // User
+        //     ['name' => 'User_access','user_id' => 1],
+        //     ['name' => 'User_show','user_id' => 1],
+        //     ['name' => 'User_create','user_id' => 1],
+        //     ['name' => 'User_edit','user_id' => 1],
+        //     ['name' => 'User_delete','user_id' => 1],
+        //     //Sample
+        //     ['name' => 'Sample_access','user_id' => 1],
+        //     ['name' => 'Sample_show','user_id' => 1],
+        //     ['name' => 'Sample_create','user_id' => 1],
+        //     ['name' => 'Sample_edit','user_id' => 1],
+        //     ['name' => 'Sample_delete','user_id' => 1],
+        //     // SampleTest
+        //     ['name' => 'SampleTest_access','user_id' => 1],
+        //     ['name' => 'SampleTest_show','user_id' => 1],
+        //     ['name' => 'SampleTest_create','user_id' => 1],
+        //     ['name' => 'SampleTest_edit','user_id' => 1],
+        //     ['name' => 'SampleTest_delete','user_id' => 1],
+        //     // Payment
+        //     ['name' => 'Payment_access','user_id' => 1],
+        //     ['name' => 'Payment_show','user_id' => 1],
+        //     ['name' => 'Payment_create','user_id' => 1],
+        //     ['name' => 'Payment_edit','user_id' => 1],
+        //     ['name' => 'Payment_delete','user_id' => 1],
+        //     // PaymentRecord
+        //     ['name' => 'PaymentRecord_access','user_id' => 1],
+        //     ['name' => 'PaymentRecord_show','user_id' => 1],
+        //     ['name' => 'PaymentRecord_create','user_id' => 1],
+        //     ['name' => 'PaymentRecord_edit','user_id' => 1],
+        //     ['name' => 'PaymentRecord_delete','user_id' => 1],
+        //     // Producer
+        //     ['name' => 'Producer_access','user_id' => 1],
+        //     ['name' => 'Producer_show','user_id' => 1],
+        //     ['name' => 'Producer_create','user_id' => 1],
+        //     ['name' => 'Producer_edit','user_id' => 1],
+        //     ['name' => 'Producer_delete','user_id' => 1],
+        //     // StorageLocation
+        //     ['name' => 'StorageLocation_access','user_id' => 1],
+        //     ['name' => 'StorageLocation_show','user_id' => 1],
+        //     ['name' => 'StorageLocation_create','user_id' => 1],
+        //     ['name' => 'StorageLocation_edit','user_id' => 1],
+        //     ['name' => 'StorageLocation_delete','user_id' => 1],
+        //     // Test
+        //     ['name' => 'Test_access','user_id' => 1],
+        //     ['name' => 'Test_show','user_id' => 1],
+        //     ['name' => 'Test_create','user_id' => 1],
+        //     ['name' => 'Test_edit','user_id' => 1],
+        //     ['name' => 'Test_delete','user_id' => 1],
+        //     // Template
+        //     ['name' => 'Template_access','user_id' => 1],
+        //     ['name' => 'Template_show','user_id' => 1],
+        //     ['name' => 'Template_create','user_id' => 1],
+        //     ['name' => 'Template_edit','user_id' => 1],
+        //     ['name' => 'Template_delete','user_id' => 1],
+        // ]);
 
 
 
