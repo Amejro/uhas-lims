@@ -1,7 +1,7 @@
 <html lang="en">
 
 <head>
-    <title>Invoice</title>
+    <title>Payment</title>
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -22,7 +22,7 @@
                 --tw-content: ''
             }
 
-            :host,
+            */ :host,
             html {
                 line-height: 1.5;
                 -webkit-text-size-adjust: 100%;
@@ -925,8 +925,13 @@
             </svg>
         </div>
 
+        <div class='flex justify-center font-bold text-2xl w-full my-3 text-center'>
+            Payment Receipt
+        </div>
 
         <div class="">
+
+
             <div class="flex justify-between mb-6">
                 <div>
                     <p class="font-semibold text-gray-700">Receipt Number:</p>

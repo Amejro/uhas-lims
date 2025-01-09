@@ -65,7 +65,11 @@ class StockHistoryRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('action'),
                 Tables\Columns\TextColumn::make('total_quantity')->suffix(function (RelationManager $livewire) {
                     return $livewire->getOwnerRecord()->unit;
-                }),
+                })
+                    ->state(function ($record) {
+                        return $record->total_quantity / 1000;
+                    })
+                ,
                 Tables\Columns\TextColumn::make('user.name')->label('By'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),

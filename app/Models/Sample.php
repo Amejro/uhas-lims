@@ -81,6 +81,7 @@ class Sample extends Model
                 'expiry_date',
                 'batch_number',
                 'serial_code',
+                'inventory_updated'
 
             ])
             ->logOnlyDirty()
@@ -123,6 +124,17 @@ class Sample extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function is_Payment_Made(): bool
+    {
+        $payment = $this->payments()->get();
+
+        if ($payment[0]->amount_paid > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     public function reports(): HasMany

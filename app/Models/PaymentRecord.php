@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Jobs\UpdateInventoryJob;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class PaymentRecord extends Model
 {
@@ -45,11 +46,12 @@ class PaymentRecord extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['amount',
-        'payment_method',
-        'transaction_id',
-        'note'])
-            ->logOnlyDirty()
+            ->logOnly([
+                'amount',
+                'payment_method',
+                'transaction_id',
+                'note'
+            ])
             ->logOnlyDirty()
             ->useLogName('payment')
             ->dontSubmitEmptyLogs();
@@ -82,6 +84,10 @@ class PaymentRecord extends Model
             $payment->balance_due = $payment->total_amount - $payment->amount_paid;
             $payment->status = ($payment->balance_due == 0) ? 'paid' : 'part payment';
             $payment->save();
+
+            if ($payment->sample()->inventory_updated === false) {
+                UpdateInventoryJob::dispatch($model->sample_id);
+            };
 
         });
     }

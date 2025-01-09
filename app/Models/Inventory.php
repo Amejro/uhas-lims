@@ -85,7 +85,8 @@ class Inventory extends Model
 
             $model->user_id = auth()->id();
             $model->status = 'available';
-            $model->total_quantity = $model->total_quantity * 1000;
+            $model->total_quantity *= 1000;
+            $model->reorder_level *= 1000;
             $model->item_variant = null;
             $model->restock_quantity = null;
         });
@@ -93,8 +94,6 @@ class Inventory extends Model
 
 
         static::created(function ($model) use (&$variants, &$totalQuantity) {
-
-
 
 
             $history = new StockHistory();
@@ -112,22 +111,27 @@ class Inventory extends Model
 
         static::updating(function ($model) {
 
-            $history = new StockHistory();
+            if ($model->restock_quantity > 0) {
+                $history = new StockHistory();
 
-            $history->create([
-                'inventory_id' => $model->id,
-                'item_variant' => $model->item_variant,
-                'action' => $model->total_quantity > 0 ? 'addition' : 'deduction',
-                'total_quantity' => $model->restock_quantity * 1000,
-                'user_id' => auth()->id(),
-            ]);
+                $history->create([
+                    'inventory_id' => $model->id,
+                    'item_variant' => $model->item_variant,
+                    'action' => $model->total_quantity > 0 ? 'addition' : 'deduction',
+                    'total_quantity' => $model->restock_quantity * 1000,
+                    'user_id' => auth()->id(),
+                ]);
 
-            $model->user_id = auth()->id();
-            $model->total_quantity += $model->restock_quantity * 1000; // restock_quantity is the new quantity to be added to the total_quantity
+                $model->user_id = auth()->id();
+                $model->total_quantity += $model->restock_quantity * 1000; // restock_quantity is the new quantity to be added to the total_quantity
+                // $model->reorder_level = $model->reorder_level * 1000;
 
-            $model->item_variant = null;
-            $model->restock_quantity = null;
+                $model->item_variant = null;
+                $model->restock_quantity = null;
+            }
 
+
+            $model->reorder_level = $model->reorder_level * 1000;
         });
 
 

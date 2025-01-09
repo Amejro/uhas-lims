@@ -31,6 +31,7 @@ return new class extends Migration {
             $table->foreignId('dosage_form_id')->constrained()->nullOnDelete();
             $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->foreignId('producer_id')->constrained()->nullOnDelete();
+            $table->boolean('inventory_updated')->default(false);
             $table->integer('total_cost')->nullable();
             $table->timestamps();
         });

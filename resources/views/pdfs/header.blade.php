@@ -1,4 +1,4 @@
-<style>
+<!-- <style>
     .header {
         display: flex;
         justify-content: center;
@@ -12,7 +12,6 @@
 
 <div class='header'>
 
-
     Payment Receipt
 
-</div>
+</div> -->
