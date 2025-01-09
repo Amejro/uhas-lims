@@ -17,8 +17,14 @@ return new class extends Migration {
             $table->decimal('price', 10, 2);
             $table->integer('size')->default(0);
             $table->integer('quantity')->default(0);
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            // $table->foreignId('user_id')->constrained();
+            // $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete(null);
+
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete(null);
             $table->timestamps();
         });
     }

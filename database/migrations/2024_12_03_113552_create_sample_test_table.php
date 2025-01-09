@@ -13,8 +13,14 @@ return new class extends Migration {
         Schema::disableForeignKeyConstraints();
 
         Schema::create('sample_test', function (Blueprint $table) {
-            $table->foreignId('sample_id');
-            $table->foreignId('test_id');
+            // $table->foreignId('sample_id');
+            // $table->foreignId('test_id');
+            $table->unsignedBigInteger('sample_id');
+            $table->foreign('sample_id')->references('id')->on('samples')->onDelete(null);
+
+            $table->unsignedBigInteger('test_id');
+            $table->foreign('test_id')->references('id')->on('tests')->onDelete(null);
+
             $table->boolean('inventory_updated')->default(false);
             $table->enum('status', ["pending", "completed", "approved"])->nullable();
             $table->json('test_result')->nullable();

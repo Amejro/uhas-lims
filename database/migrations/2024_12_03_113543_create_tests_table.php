@@ -18,7 +18,9 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->json('reagent_kit')->nullable();
             $table->integer('price');
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            // $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete(null);
             $table->timestamps();
         });
 

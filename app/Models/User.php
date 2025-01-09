@@ -72,6 +72,8 @@ class User extends Authenticatable
 
     public function hasPermission(string $permission): bool
     {
+ 
+
         // return $this->role()->where('permissions', 'LIKE', "%{$permission}%")->exists();
 
         $permissionArray = [];

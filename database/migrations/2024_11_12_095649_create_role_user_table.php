@@ -11,8 +11,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('role_user', function (Blueprint $table) {
-            $table->foreignId('role_id')->constrained()->nullOnDelete();
-            $table->foreignId('user_id')->constrained()->nullOnDelete();
+            // $table->foreignId('role_id')->constrained()->nullOnDelete();
+            // $table->foreignId('user_id')->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete(null);
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete(null);
+
             $table->unique(['user_id', 'role_id']);
         });
     }

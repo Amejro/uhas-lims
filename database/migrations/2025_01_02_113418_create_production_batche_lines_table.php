@@ -14,8 +14,14 @@ return new class extends Migration {
             $table->id();
             $table->integer('quantity')->default(0)->nullable();
             $table->integer('estimate_quantity')->default(0)->nullable();
-            $table->foreignId('product_variant_id')->constrained()->nullOnDelete();
-            $table->foreignId('production_batche_id')->constrained()->nullOnDelete();
+            // $table->foreignId('product_variant_id')->constrained()->nullOnDelete();
+            // $table->foreignId('production_batche_id')->constrained()->nullOnDelete();
+
+            $table->unsignedBigInteger('product_variant_id');
+            $table->foreign('product_variant_id')->references('id')->on('product_variants')->onDelete(null);
+
+            $table->unsignedBigInteger('production_batche_id');
+            $table->foreign('production_batche_id')->references('id')->on('production_batches')->onDelete(null);
             $table->timestamps();
         });
     }

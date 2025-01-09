@@ -37,6 +37,8 @@ class ProductionBatcheResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected $ingredientArray = [];
 
     public static function form(Form $form): Form

@@ -11,8 +11,15 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('permission_role', function (Blueprint $table) {
-            $table->foreignId('permission_id')->constrained()->nullOnDelete();
-            $table->foreignId('role_id')->constrained()->nullOnDelete();
+
+            $table->unsignedBigInteger('permission_id');
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete(null);
+
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete(null);
+
+            // $table->foreignId('permission_id')->constrained()->nullOnDelete();
+            // $table->foreignId('role_id')->constrained()->nullOnDelete();
         });
     }
 

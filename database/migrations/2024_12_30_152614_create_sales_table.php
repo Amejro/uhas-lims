@@ -12,7 +12,10 @@ return new class extends Migration {
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_variant_id')->constrained()->nullOnDelete();
+            // $table->foreignId('product_variant_id')->constrained()->nullOnDelete();
+
+            $table->unsignedBigInteger('product_variant_id');
+            $table->foreign('product_variant_id')->references('id')->on('product_variants')->onDelete(null);
             $table->integer('quantity_sold');
             $table->string('customer_name')->nullable();
             $table->text('notes')->nullable();

@@ -19,7 +19,10 @@ return new class extends Migration {
             $table->string('gps_address')->nullable();
             $table->string('phone');
             $table->string('email')->nullable();
-            $table->foreignId('user_id')->constrained()->nullOnDelete();
+            // $table->foreignId('user_id')->constrained()->nullOnDelete();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete(null);
             $table->timestamps();
         });
 

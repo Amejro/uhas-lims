@@ -14,8 +14,15 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('inventory_test', function (Blueprint $table) {
-            $table->foreignId('inventory_id');
-            $table->foreignId('test_id');
+            // $table->foreignId('inventory_id');
+            // $table->foreignId('test_id');
+
+            $table->unsignedBigInteger('inventory_id');
+            $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('cascade');
+
+            $table->unsignedBigInteger('test_id');
+            $table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
+
         });
 
         Schema::enableForeignKeyConstraints();

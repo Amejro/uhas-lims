@@ -23,18 +23,29 @@ return new class extends Migration {
             $table->timestamp('expiry_date');
             $table->enum('status', ["available", "out_of_stock"]);
             $table->json('item_variant')->nullable();
-            $table->foreignId('storage_location_id')->constrained()->nullOnDelete();
-            $table->foreignId('user_id')->constrained()->nullOnDelete();
+            // $table->foreignId('storage_location_id')->constrained()->nullOnDelete();
+            // $table->foreignId('user_id')->constrained()->nullOnDelete();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete(null);
+
+            $table->unsignedBigInteger('storage_location_id');
+            $table->foreign('storage_location_id')->references('id')->on('storage_locations')->onDelete(null);
+
             $table->timestamps();
         });
 
         Schema::create('stock_histories', function (Blueprint $table) {
             $table->id();
             $table->integer('total_quantity');
-            $table->foreignId('inventory_id')->constrained()->nullable()->nullOnDelete();
+            // $table->foreignId('inventory_id')->constrained()->nullable()->nullOnDelete();
+            $table->unsignedBigInteger('inventory_id');
+            $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete(null);
             $table->json('item_variant')->nullable();
             $table->enum('action', ["addition", "deduction"]);
-            $table->foreignId('user_id')->constrained()->nullOnDelete();
+            // $table->foreignId('user_id')->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete(null);
             $table->timestamps();
         });
 
