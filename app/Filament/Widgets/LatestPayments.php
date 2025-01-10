@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Role;
 use Filament\Tables;
 use App\Models\Payment;
 use Filament\Tables\Table;
@@ -17,7 +18,7 @@ class LatestPayments extends BaseWidget
     public static function canView(): bool
     {
 
-        if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin') || auth()->user()->hasRole('accountant')) {
+        if (auth()->user()->hasRole(Role::SUPER_AMINISTRATOR) || auth()->user()->hasRole(Role::AMINISTRATOR) || auth()->user()->hasRole(Role::ACCOUNTANT)) {
             return true;
         }
         return false;

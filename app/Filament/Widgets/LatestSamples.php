@@ -2,9 +2,10 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Role;
 use Filament\Tables;
-use App\Models\Sample;
 
+use App\Models\Sample;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
@@ -18,7 +19,7 @@ class LatestSamples extends BaseWidget
 
     public static function canView(): bool
     {
-        if (auth()->user()->hasRole('accountant')) {
+        if (auth()->user()->hasRole(Role::ACCOUNTANT)) {
             return false;
         }
         return true;

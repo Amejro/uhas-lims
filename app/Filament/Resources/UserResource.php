@@ -46,7 +46,7 @@ class UserResource extends Resource
                 Select::make('role_id')
                     ->label('Role')
                     ->options(function () {
-                        return Role::where('code', '!=', 'super_admin')->pluck('name', 'id');
+                        return Role::where('id', '!=', Role::SUPER_AMINISTRATOR)->pluck('name', 'id');
                     })
                     ->disabled(function ($record) {
                         if ($record) {

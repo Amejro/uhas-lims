@@ -16,8 +16,9 @@ return new class extends Migration {
             $table->string('name');
             $table->json('content')->nullable();
             $table->foreignId('test_id')->nullable();
-            $table->foreignId('dosage_form_id')->nullable();
-            $table->foreignId('user_id')->nullable();
+            // $table->foreignId('dosage_form_id')->nullable();
+            $table->json('dosage_form_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable(); 
 
             // $table->unsignedBigInteger('test_id');
             // $table->foreign('test_id')->references('id')->on('tests')->onDelete(null)->nullable();

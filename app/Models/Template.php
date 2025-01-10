@@ -47,9 +47,9 @@ class Template extends Model
         return $this->belongsTo(Test::class);
     }
 
-    public function dosageForm(): BelongsTo
+    public function dosageForm(): HasMany
     {
-        return $this->belongsTo(DosageForm::class);
+        return $this->hasMany(DosageForm::class);
     }
 
     public function user(): BelongsTo

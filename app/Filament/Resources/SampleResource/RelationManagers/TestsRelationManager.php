@@ -99,16 +99,8 @@ class TestsRelationManager extends RelationManager
                         if (!$record->test_result) {
 
                             UpdateInventoryJob::dispatch($record->test_id);
-                            // update inventory
-                            // $test = Test::find($record->test_id);
-                            // collect($test->reagent_kit)->map(function ($kit) {
-                            //     $inventory = Inventory::find($kit['reagent_kit']);
-                            //     $inventory->total_quantity -= (int) $kit['quantity'];
-                            //     $inventory->save();
-                            // });
+                            
             
-                            return;
-
                             $sample = Sample::find($record->sample_id);
 
                             $template = Template::where('test_id', $record->test_id)->where('dosage_form_id', 'like', "%$sample->dosage_form_id%")->first();

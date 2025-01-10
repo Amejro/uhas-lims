@@ -27,18 +27,22 @@ class Role extends Model
     protected $casts = [
         'id' => 'integer',
     ];
-    // const SUPER_AMINISTRATOR = 'Super Administrator';
-    // const AMINISTRATOR = 'Administrator';
-    // const HOD = 'HOD';
-    // const EXAMINER = 'Examiner';
-    // const STUDENT = 'Student';
+    const SUPER_AMINISTRATOR = 1;
+    const AMINISTRATOR = 2;
+    const TECHNICIAN = 3;
+    const ACCOUNTANT = 4;
+    const RECEPTIONIST = 5;
+    const STORE_KEEPER = 6;
 
-    // const ROLES = [
-    //     'Administrator' => 'Administrator',
-    //     'HOD' => 'HOD',
-    //     'Student' => 'Student',
-    //     'Supervisor' => 'Supervisor',
-    // ];
+    const ROLES = [
+        'super_Administrator' => 'super_administrator',
+        'Administrator' => 'administrator',
+        'Technician' => 'technician',
+        'Accountant' => 'accountant',
+        'Receptionist' => 'receptionist',
+        'Store_Keeper' => 'store_keeper',
+    ];
+
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);

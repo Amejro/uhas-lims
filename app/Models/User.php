@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Role;
 use App\Mail\UserCreated;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -67,7 +68,7 @@ class User extends Authenticatable
 
     public function hasRole(string $role): bool
     {
-        return $this->role()->where('code', $role)->exists();
+        return $this->role()->where('id', $role)->exists();
     }
 
 
@@ -103,19 +104,20 @@ class User extends Authenticatable
 
     public function is_super_admin()
     {
-        return $this->role()->where('code', 'super_admin')->exists();
+        return $this->role()->where('id', Role::SUPER_AMINISTRATOR)->exists();
     }
 
 
 
     public function is_admin()
     {
-        return $this->role()->where('code', 'admin')->exists() || $this->role()->where('code', 'super_admin')->exists();
+        
+        return $this->role()->where('id', Role::AMINISTRATOR)->exists() || $this->role()->where('id', Role::SUPER_AMINISTRATOR)->exists();
     }
 
     public function is_technician()
     {
-        return $this->role()->where('code', 'technician')->exists();
+        return $this->role()->where('id', Role::TECHNICIAN)->exists() ;
     }
 
     public static function booted()

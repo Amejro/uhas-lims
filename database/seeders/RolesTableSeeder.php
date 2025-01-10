@@ -23,12 +23,12 @@ class RolesTableSeeder extends Seeder
             //     'name' => Role::ROLES['Administrator'],
             // ],
 
-            ['id' => 1,'name' => 'Super Admin', 'code' => 'super_admin', 'user_id' => 1],
-            ['id' => 2,'name' => 'Admin', 'code' => 'admin', 'user_id' => 1],
-            ['id' => 3,'name' => 'Technician', 'code' => 'technician', 'user_id' => 1],
-            ['id' => 4,'name' => 'Accountant', 'code' => 'accountant', 'user_id' => 1],
-            ['id' => 5,'name' => 'Receptionist', 'code' => 'receptionist', 'user_id' => 1],
-            ['id' => 6,'name' => 'Store Keeper', 'code' => 'store_keeper', 'user_id' => 1],
+            ['id' => 1,'name' => 'super Administrator', 'code' => Role::ROLES['super_Administrator'], 'user_id' => 1],
+            ['id' => 2,'name' => 'Administrator', 'code' => Role::ROLES['Administrator'], 'user_id' => 1],
+            ['id' => 3,'name' => 'Technician', 'code' => Role::ROLES['Technician'], 'user_id' => 1],
+            ['id' => 4,'name' => 'Accountant', 'code' => Role::ROLES['Accountant'], 'user_id' => 1],
+            ['id' => 5,'name' => 'Receptionist', 'code' => Role::ROLES['Receptionist'], 'user_id' => 1],
+            ['id' => 6,'name' => 'Store Keeper', 'code' => Role::ROLES['Store_Keeper'], 'user_id' => 1],
         ];
 
         Role::insert($roles);

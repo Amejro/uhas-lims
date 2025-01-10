@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Role;
 use App\Models\Sample;
 use App\Models\Payment;
 use App\Models\Producer;
@@ -10,8 +11,8 @@ use App\Models\PaymentRecord;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 
@@ -25,7 +26,7 @@ class statOverview extends BaseWidget
     public static function canView(): bool
     {
 
-        if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin') || auth()->user()->hasRole('accountant')) {
+        if (auth()->user()->hasRole(Role::SUPER_AMINISTRATOR) || auth()->user()->hasRole(Role::AMINISTRATOR) || auth()->user()->hasRole(Role::ACCOUNTANT)) {
             return true;
         }
         return false;
