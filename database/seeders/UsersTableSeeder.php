@@ -16,11 +16,11 @@ class UsersTableSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'Super Admin',
+                'name' => 'Super Administrator',
                 'email' => 'ict@uhas.edu.gh',
                 'password' => Hash::make('superadmin'),
             ],
-            
+
         ];
 
         User::insert($users);

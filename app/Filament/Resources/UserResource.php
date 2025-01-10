@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Auth;
 use Filament\Forms;
 use App\Models\Role;
 use App\Models\User;
@@ -37,23 +38,36 @@ class UserResource extends Resource
                     ->required(),
                 TextInput::make('email')
                     ->email()
-                    ->unique(table: User::class)
+                    // ->unique(table: User::class)
                     ->endsWith(['@uhas.edu.gh'])
                     ->required(),
                 // DateTimePicker::make('email_verified_at'),
 
                 Select::make('role_id')
-                    ->relationship('role', 'name')
-                    // ->disabled(function ($record) {
-                    //     return $record;
-                    // })
+                    ->label('Role')
+                    ->options(function () {
+                        return Role::where('code', '!=', 'super_admin')->pluck('name', 'id');
+                    })
+                    ->disabled(function ($record) {
+                        if ($record) {
+                            return $record->is_super_admin() && Auth::user()->is_super_admin();
+                        }
+                    })
+
+
                     ->required()
                 ,
 
                 Toggle::make('is_active')
                     ->hidden(function ($record) {
                         return !$record;
-                    }),
+                    })
+                    ->disabled(function ($record) {
+                        if ($record) {
+                            return $record->is_super_admin() && Auth::user()->is_super_admin();
+                        }
+                    })
+                ,
 
 
             ]);

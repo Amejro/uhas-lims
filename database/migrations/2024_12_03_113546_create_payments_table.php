@@ -10,7 +10,6 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
 
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
@@ -48,7 +47,6 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::enableForeignKeyConstraints();
     }
 
     /**

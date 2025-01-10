@@ -37,7 +37,7 @@ class TemplateResource extends Resource
                     ->relationship('test', 'name')
                     ->required(),
                 Forms\Components\Select::make('dosage_form_id')
-                ->label('Dosage form')
+                    ->label('Dosage form')
                     // ->relationship('dosageForm', 'name')
                     ->multiple()
                     ->options(function () {
@@ -81,15 +81,15 @@ class TemplateResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('test.name')
-                    ->numeric()
-                    ->sortable(),
+                    ->numeric(),
                 // Tables\Columns\TextColumn::make('dosageForm.name')
                 //     ->numeric()
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Created by')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

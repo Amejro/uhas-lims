@@ -54,10 +54,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     // public function roles()
     // {
     //     return $this->belongsToMany(Role::class)->withPivot('user_id', 'role_id');
     // }
+
     public function role()
     {
         return $this->belongsTo(Role::class);
@@ -72,16 +74,16 @@ class User extends Authenticatable
 
     public function hasPermission(string $permission): bool
     {
- 
+
 
         // return $this->role()->where('permissions', 'LIKE', "%{$permission}%")->exists();
 
         $permissionArray = [];
         // foreach ($this->role as $role) {
-            foreach ($this->role->permissions as $singlepermission) {
-                $permissionArray[] = $singlepermission->name;
+        foreach ($this->role->permissions as $singlepermission) {
+            $permissionArray[] = $singlepermission->name;
 
-            }
+        }
 
         // }
         return collect($permissionArray)->unique()->contains($permission);
@@ -131,7 +133,7 @@ class User extends Authenticatable
         static::created(function ($model) use ($defaultPassword) {
 
 
-          $myMail =  Mail::to($model->email)->send(new UserCreated($defaultPassword, $user = $model));
+            $myMail = Mail::to($model->email)->send(new UserCreated($defaultPassword, $user = $model));
 
 
             Notification::make()

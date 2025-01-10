@@ -13,7 +13,13 @@ class RoleUserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        User::findOrFail(1)->role()->sync(1);
+        // User::findOrFail(1)->role()->sync(1);
+
+        $user = User::findOrFail(1);
+        $user->role_id = 1;
+        $user->save();
+
+
         // User::findOrFail(2)->roles()->sync(2);
     }
 }
