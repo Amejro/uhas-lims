@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use Filament\Pages;
 use Filament\Panel;
+use App\Models\Role;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use App\Filament\Pages\Dashboard;
@@ -79,7 +80,7 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationGroup('Settings & Logs')
                     ->authorize(
                         function () {
-                            if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin')) {
+                            if (auth()->user()->hasRole(Role::SUPER_AMINISTRATOR) || auth()->user()->hasRole(Role::AMINISTRATOR)) {
                                 return true;
                             }
                             return false;
