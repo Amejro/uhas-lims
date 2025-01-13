@@ -141,7 +141,9 @@ class User extends Authenticatable
             Notification::make()
                 ->title('Account Created Successfully')
                 ->success()
-                ->body('An email has been sent to ' . $model->email . ' with the default password')
+                ->body('Account ' . $model->email . ' created with the default password: '.$defaultPassword)
+// 
+                // ->body('An email has been sent to ' . $model->email . ' with the default password')
                 ->persistent()
                 ->send();
 

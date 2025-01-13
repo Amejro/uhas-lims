@@ -44,9 +44,7 @@ class InventoryResource extends Resource
 
                         ->schema([
                             Forms\Components\TextInput::make('name')
-                                ->required()->readOnly(function ($record) {
-                                    return $record;
-                                }),
+                                ->required(),
                             Forms\Components\Select::make('unit')->live()
                                 ->options(
                                     [
@@ -60,7 +58,7 @@ class InventoryResource extends Resource
                             Forms\Components\DatePicker::make('expiry_date')->required()->readOnly(function ($record) {
                                 return $record;
                             }),
-                            Forms\Components\Select::make('storage_location_id')->relationship('storageLocation', 'id')->required(),
+                            Forms\Components\Select::make('storage_location_id')->relationship('storageLocation', 'room')->required(),
 
                             Repeater::make('item_variant')->label('Item Variant(s)')->schema([
                                 TextInput::make('variant')->live()->suffix(function (Get $get) {

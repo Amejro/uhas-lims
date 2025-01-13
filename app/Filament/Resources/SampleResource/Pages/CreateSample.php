@@ -60,6 +60,9 @@ class CreateSample extends CreateRecord
                     ,
                     DatePicker::make('date_of_manufacture'),
                     DatePicker::make('expiry_date')->label('Date of expiry'),
+                    Select::make('storage_location_id')
+                        ->relationship('storageLocation', 'room')
+                        ->required(),
 
                 ])->columns(2),
 
@@ -105,9 +108,7 @@ class CreateSample extends CreateRecord
                         ->readOnly()
                         ->prefix('GH₵')
                         ->numeric(),
-                    Select::make('storage_location_id')
-                        ->relationship('storageLocation', 'room')
-                        ->required(),
+                    
                     Radio::make('status')
                         ->hidden(function ($record) {
                             if (!$record) {
