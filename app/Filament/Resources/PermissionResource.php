@@ -14,6 +14,7 @@ use App\Filament\Imports\PermissionImporter;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PermissionResource\Pages;
 use App\Filament\Resources\PermissionResource\RelationManagers;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 class PermissionResource extends Resource
 {
@@ -57,6 +58,9 @@ class PermissionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                ActivityLogTimelineTableAction::make('Activities')->hidden(function () {
+                    return !auth()->user()->is_admin();
+                }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

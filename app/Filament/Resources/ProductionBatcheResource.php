@@ -29,6 +29,7 @@ use Filament\Forms\Components\ViewField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductionBatcheResource\Pages;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 use App\Filament\Resources\ProductionBatcheResource\RelationManagers;
 
 class ProductionBatcheResource extends Resource
@@ -319,6 +320,9 @@ class ProductionBatcheResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                ActivityLogTimelineTableAction::make('Activities')->hidden(function () {
+                    return !auth()->user()->is_admin();
+                }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

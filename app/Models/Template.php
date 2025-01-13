@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Template extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -36,6 +37,21 @@ class Template extends Model
         'dosage_form_id' => 'array',
         'user_id' => 'integer',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'test_id',
+                'dosage_form_id',
+                'user_id'
+            ])
+            ->logOnlyDirty()
+            ->useLogName('Template')
+            ->dontSubmitEmptyLogs();
+    }
+
 
     public function dosageForms(): HasMany
     {

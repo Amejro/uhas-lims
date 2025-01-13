@@ -18,6 +18,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -54,6 +55,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'email',
+                'role_id',
+                'is_active'
+            ])
+            ->logOnlyDirty()
+            ->useLogName('User')
+            ->dontSubmitEmptyLogs();
     }
 
     // public function roles()

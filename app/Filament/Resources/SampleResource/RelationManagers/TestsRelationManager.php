@@ -100,7 +100,6 @@ class TestsRelationManager extends RelationManager
 
                             UpdateInventoryJob::dispatch($record->test_id);
                             
-            
                             $sample = Sample::find($record->sample_id);
 
                             $template = Template::where('test_id', $record->test_id)->where('dosage_form_id', 'like', "%$sample->dosage_form_id%")->first();

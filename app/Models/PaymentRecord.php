@@ -85,9 +85,6 @@ class PaymentRecord extends Model
             $payment->status = ($payment->balance_due == 0) ? 'paid' : 'part payment';
             $payment->save();
 
-            if ($payment->sample()->inventory_updated === false) {
-                UpdateInventoryJob::dispatch($model->sample_id);
-            };
 
         });
     }

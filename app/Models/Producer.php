@@ -36,6 +36,22 @@ class Producer extends Model
         'user_id' => 'integer',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'address',
+                'gps_address',
+                'phone',
+                'email',
+                'user_id',
+            ])
+            ->logOnlyDirty()
+            ->useLogName('Producer')
+            ->dontSubmitEmptyLogs();
+    }
+
     public function samples(): HasMany
     {
         return $this->hasMany(Sample::class);

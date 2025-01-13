@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class DosageForm extends Model
 {
     use HasFactory;
+    use LogsActivity;
+
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +30,18 @@ class DosageForm extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'code',
+            ])
+            ->logOnlyDirty()
+            ->useLogName('Dosage Form')
+            ->dontSubmitEmptyLogs();
+    }
 
     public function samples(): HasMany
     {

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Role extends Model
 {
     use HasFactory;
+    use LogsActivity;
+
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +44,17 @@ class Role extends Model
         'Receptionist' => 'receptionist',
         'Store_Keeper' => 'store_keeper',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+            ])
+            ->logOnlyDirty()
+            ->useLogName('Role')
+            ->dontSubmitEmptyLogs();
+    }
 
     public function permissions(): BelongsToMany
     {

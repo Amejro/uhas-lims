@@ -24,6 +24,7 @@ use Filament\Forms\Components\Actions\Action;
 use App\Filament\Resources\InventoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\InventoryResource\RelationManagers;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 use App\Filament\Resources\InventoryResource\RelationManagers\StockHistoryRelationManager;
 
 
@@ -202,6 +203,9 @@ class InventoryResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                ActivityLogTimelineTableAction::make('Activities')->hidden(function () {
+                    return !auth()->user()->is_admin();
+                }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

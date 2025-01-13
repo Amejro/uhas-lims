@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Permission extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +28,18 @@ class Permission extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+              
+            ])
+            ->logOnlyDirty()
+            ->useLogName('Permission')
+            ->dontSubmitEmptyLogs();
+    }
 
     public function roles(): BelongsToMany
     {

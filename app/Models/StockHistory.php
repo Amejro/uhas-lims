@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StockHistory extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
 
     /**
@@ -36,6 +37,21 @@ class StockHistory extends Model
         'user_id' => 'integer',
         'total_quantity' => 'integer',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'total_quantity',
+                'item_variant',
+                'action',
+                'inventory_id',
+                'user_id'
+            ])
+            ->logOnlyDirty()
+            ->useLogName('payment')
+            ->dontSubmitEmptyLogs();
+    }
 
     public function inventory()
     {

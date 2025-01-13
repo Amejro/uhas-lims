@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DosageFormResource\Pages;
-use App\Filament\Resources\DosageFormResource\RelationManagers;
-use App\Models\DosageForm;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\DosageForm;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\DosageFormResource\Pages;
+use App\Filament\Resources\DosageFormResource\RelationManagers;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 class DosageFormResource extends Resource
 {
@@ -61,6 +62,10 @@ class DosageFormResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+
+                ActivityLogTimelineTableAction::make('Activities')->hidden(function () {
+                    return !auth()->user()->is_admin();
+                }),
 
             ])
             ->bulkActions([

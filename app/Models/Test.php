@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Test extends Model
 {
     use HasFactory;
+    use LogsActivity;
+
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +37,21 @@ class Test extends Model
         'user_id' => 'integer',
         'reagent_kit' => 'array',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'description',
+                'price',
+                'reagent_kit',
+                'user_id',
+            ])
+            ->logOnlyDirty()
+            ->useLogName('Test')
+            ->dontSubmitEmptyLogs();
+    }
 
     public function templates(): HasMany
     {

@@ -20,6 +20,7 @@ use Filament\Infolists\Components\TextEntry;
 use App\Filament\Resources\PaymentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PaymentResource\RelationManagers;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 use App\Filament\Resources\PaymentResource\RelationManagers\PaymentRecordsRelationManager;
 
 class PaymentResource extends Resource
@@ -102,6 +103,9 @@ class PaymentResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
+                ActivityLogTimelineTableAction::make('Activities')->hidden(function () {
+                    return !auth()->user()->is_admin();
+                }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

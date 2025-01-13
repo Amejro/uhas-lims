@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class StorageLocation extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +30,20 @@ class StorageLocation extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'room',
+                'freezer',
+                'shelf',
+                
+            ])
+            ->logOnlyDirty()
+            ->useLogName('Storage Location')
+            ->dontSubmitEmptyLogs();
+    }
 
     public function samples(): HasMany
     {

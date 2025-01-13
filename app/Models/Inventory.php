@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Inventory extends Model
 {
     use HasFactory;
+    use LogsActivity;
+
 
     /**
      * The attributes that are mass assignable.
@@ -51,6 +53,27 @@ class Inventory extends Model
 
     protected $variants;
     protected $totalQuantity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'description',
+                'unit',
+                'total_quantity',
+                'restock_quantity',
+                'reorder_level',
+                'expiry_date',
+                'status',
+                'item_variant',
+                'storage_location_id',
+                'user_id',
+            ])
+            ->logOnlyDirty()
+            ->useLogName('Inventory')
+            ->dontSubmitEmptyLogs();
+    }
 
     public function storageLocation(): BelongsTo
     {
