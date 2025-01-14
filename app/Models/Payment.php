@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Payment extends Model
 {
     use HasFactory;
+    use LogsActivity;
+
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +41,22 @@ class Payment extends Model
         'user_id' => 'integer',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'total_amount',
+                'amount_paid',
+                'serial_code',
+                'balance_due',
+                'status',
+                'sample_id',
+                'user_id',
+            ])
+            ->logOnlyDirty()
+            ->useLogName('payment')
+            ->dontSubmitEmptyLogs();
+    }
     public function sample(): BelongsTo
     {
         return $this->belongsTo(Sample::class);

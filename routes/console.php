@@ -11,6 +11,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 
-Schedule::job(new NotifySampleStatusJob)->everyMinute();
-
-// ->daily();
+Schedule::job(new NotifySampleStatusJob)->daily();

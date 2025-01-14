@@ -49,8 +49,11 @@ class InventoryResource extends Resource
                             Forms\Components\Select::make('unit')->live()
                                 ->options(
                                     [
-                                        'kg' => 'kg',
+'kg' => 'kg',
+                                        'g' => 'g',
+                                        'mg' => 'mg',
                                         'L' => 'L',
+                                        'mL' => 'mL',
                                     ]
                                 ),
                             Forms\Components\Textarea::make('description')->columnSpanFull()->readOnly(function ($record) {
@@ -65,13 +68,13 @@ class InventoryResource extends Resource
                                 TextInput::make('variant')->live()->suffix(function (Get $get) {
                                     return $get('../../unit');
                                 })->afterStateUpdated(function (Set $set, Get $get) {
-                                    $set('sub_total', $get('quantity') * $get('variant'));
+                                    $set('sub_total', (int)$get('quantity') * (int)$get('variant'));
                                 })->numeric()
                                     ->live(true)
                                     ->required(),
 
                                 TextInput::make('quantity')->numeric()->live(true)->afterStateUpdated(function (Set $set, Get $get) {
-                                    $set('sub_total', $get('quantity') * $get('variant'));
+                                    $set('sub_total', (int)$get('quantity') * (int)$get('variant'));
                                 })->required(),
 
                                 TextInput::make('sub_total')->numeric()->disabled()->suffix(function (Get $get) {
@@ -106,7 +109,12 @@ class InventoryResource extends Resource
                             ->label(function ($record) {
                                 return $record ? 'Available Quantity' : 'Total Quantity';
                             })
-
+                            ->afterStateHydrated(function (TextInput $component,  $state,$record) {
+                               
+                                if($record && $state !== null) {
+                                    $component->state($state/1000);
+                                }
+                            })
 
                             // ->state(function ($record) {
                             //     if ($record) {
@@ -127,6 +135,12 @@ class InventoryResource extends Resource
                                 return $get('unit');
 
                             })
+                            ->afterStateHydrated(function (TextInput $component,  $state,$record) {
+                                if($record && $state !== null) {
+                                    $component->state($state/1000);
+                                }
+                                
+                            })
                             ->numeric(),
 
                         Forms\Components\TextInput::make('restock_quantity')
@@ -136,6 +150,12 @@ class InventoryResource extends Resource
                             })
                             ->hidden(function ($record) {
                                 return !$record;
+                            })
+                            ->afterStateHydrated(function (TextInput $component,  $state, $record) {
+                                if($record && $state !== null) {
+                                    $component->state($state/1000);
+                                }
+                                // $component->state($state/1000);
                             })
                             ->live()
                             ->readOnly()

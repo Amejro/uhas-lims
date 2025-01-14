@@ -16,6 +16,7 @@ use FilamentTiptapEditor\Enums\TiptapOutput;
 use App\Filament\Resources\TemplateResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\TemplateResource\RelationManagers;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 class TemplateResource extends Resource
 {
@@ -107,6 +108,9 @@ class TemplateResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\ReplicateAction::make(),
                 Tables\Actions\EditAction::make(),
+                ActivityLogTimelineTableAction::make('Activities')->hidden(function () {
+                    return !auth()->user()->is_admin();
+                }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

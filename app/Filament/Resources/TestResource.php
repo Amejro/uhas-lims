@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\TestResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\TestResource\RelationManagers;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 class TestResource extends Resource
 {
@@ -64,6 +65,10 @@ class TestResource extends Resource
 
                                         if ($ingredient->unit == 'Kg') {
                                             return 'g';
+                                        }
+
+                                        if ($ingredient->unit == 'g') {
+                                            return 'mg';
                                         }
 
                                         // return $get('ingredient');
@@ -114,6 +119,10 @@ class TestResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ReplicateAction::make(),
+                ActivityLogTimelineTableAction::make('Activities')->hidden(function () {
+                    return !auth()->user()->is_admin();
+                })
+                ,
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

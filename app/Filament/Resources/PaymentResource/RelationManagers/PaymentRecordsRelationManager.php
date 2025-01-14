@@ -54,9 +54,9 @@ class PaymentRecordsRelationManager extends RelationManager
                                     $fail("Amount cannot be more than (GH₵ {$livewire->getOwnerRecord()->balance_due}).");
                                 }
 
-                                if ($livewire->getOwnerRecord()->amount_paid > 0 && $value < $livewire->getOwnerRecord()->balance_due) {
-                                    $fail("An amount of GH₵ {$livewire->getOwnerRecord()->balance_due} is required.");
-                                }
+                                // if ($livewire->getOwnerRecord()->amount_paid > 0 && $value < $livewire->getOwnerRecord()->balance_due) {
+                                //     $fail("An amount of GH₵ {$livewire->getOwnerRecord()->balance_due} is required.");
+                                // }
 
                                 if ($livewire->getOwnerRecord()->amount_paid == 0 && $value < $livewire->getOwnerRecord()->balance_due * 0.6) {
                                     $fail("At least 60% required.");

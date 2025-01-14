@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Carbon\Carbon;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Sample;
 use Filament\Notifications\Notification;
@@ -48,27 +49,9 @@ class NotifySampleStatusJob implements ShouldQueue
 
         // Get all technicians and admins
         $recepients = User::with('role')->whereHas('role', function ($query) {
-            $query->where('code', 'technician')->orWhere('code', 'super_admin');
+            $query->where('id', Role::TECHNICIAN)->orWhere('id', Role::SUPER_AMINISTRATOR)->orWhere('id', Role::AMINISTRATOR) ;
         })->get();
 
-
-        // foreach ($all as $sample) {
-
-        //     foreach ($recepients as $receipient) {
-        //         Notification::make()
-        //             ->title('Reminder')
-        //             ->body('Sample has been in "collected" state for two weeks (all samples).')
-        //             ->warning()
-        //             ->actions([
-        //                 Action::make('View Sample')
-        //                     ->url(url('/samples/' . $sample->id))
-        //                     ->markAsRead(),
-        //             ])
-
-        //             ->sendToDatabase($receipient);
-        //     }
-
-        // }
 
 
         if ($twoWeekSamples->count() > 0) {
@@ -77,7 +60,7 @@ class NotifySampleStatusJob implements ShouldQueue
                 foreach ($recepients as $receipient) {
                     Notification::make()
                         ->title('Reminder:')
-                        ->body('Sample has been in "collected" state for two weeks. View Sample' . url('/samples/' . $sample->id))
+                        ->body( "Sample $sample->serial_code has been in collected state for two weeks.")
                         ->warning()
                         ->actions([
                             Action::make('View Sample')
@@ -98,7 +81,7 @@ class NotifySampleStatusJob implements ShouldQueue
                     Notification::make()
                         ->title('Reminder')
                         ->warning()
-                        ->body('Sample has been in "collected" state for three weeks.')
+                        ->body("Sample $sample->serial_code has been in collected state for three weeks.")
                         ->actions([
                             Action::make('View Sample')
                                 ->url(url('/samples/' . $sample->id))
