@@ -45,7 +45,6 @@ class DownloadPdfController extends Controller
             ->showBrowserHeaderAndFooter()
             ->headerHtml($header)
             ->footerHtml($footer)
-            ->setChromePath("/root/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome")
             ->pdf();
 
 
