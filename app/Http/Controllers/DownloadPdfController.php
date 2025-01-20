@@ -17,14 +17,14 @@ class DownloadPdfController extends Controller
         $producer = $record->producer()->first();
         $dosageForm = $record->dosageForm()->first();
         $user = User::find(auth()->id());
-        
+
 
         $data = [
             'sample' => $record,
             'tests' => $tests,
             'producer' => $producer,
             'dosageForm' => $dosageForm,
-            'user'=> $user
+            'user' => $user
         ];
 
 
@@ -45,6 +45,7 @@ class DownloadPdfController extends Controller
             ->showBrowserHeaderAndFooter()
             ->headerHtml($header)
             ->footerHtml($footer)
+            ->setChromePath("/root/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome")
             ->pdf();
 
 
